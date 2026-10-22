@@ -1,0 +1,204 @@
+name: Refresh public crime data
+
+on:
+  schedule:
+    # Off the top of the hour, after the usual quarterly publication window.
+    - cron: "17 6 28 * *"
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Also publish app code to Cloudflare (requires optional deployment secrets)"
+        type: boolean
+        required: true
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: crimeledger-production
+  cancel-in-progress: false
+
+jobs:
+  refresh-and-publish:
+    # A manually selected feature branch must never overwrite production data.
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      PAGES_PROJECT: ${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+      VITE_DATA_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.event.repository.default_branch }}/public/data
+    steps:
+      - name: Check out the publication branch
+        uses: actions/checkout@v6
+
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install -r scripts/requirements.txt
+          npm ci
+
+      - name: Retrieve and validate official sources
+        run: python scripts/refresh_data.py
+
+      - name: Retrieve and validate the monthly police.uk layer
+        run: python scripts/refresh_monthly.py
+
+      - name: Record the successful source check separately from the crime period
+        run: |
+          python - <<'PY'
+          import datetime
+          import hashlib
+          import json
+          import pathlib
+          import subprocess
+
+          path = pathlib.Path("public/data/crime.json")
+          payload = path.read_bytes()
+          json.loads(payload)
+          monthly = pathlib.Path("public/data/monthly.json")
+          paths = [path] + ([monthly] if monthly.exists() else [])
+          changed = False
+          for candidate in paths:
+              previous = subprocess.run(
+                  ["git", "show", f"HEAD:{candidate.as_posix()}"], capture_output=True
+              )
+              if previous.returncode not in (0, 128):
+                  raise SystemExit("Unable to compare the generated crime data")
+              changed = changed or previous.returncode != 0 or previous.stdout != candidate.read_bytes()
+          status = {
+              "schemaVersion": 1,
+              "checkedAt": datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="seconds"),
+              "result": "updated" if changed else "unchanged",
+              "datasetSha256": hashlib.sha256(payload).hexdigest(),
+              "note": "Successful retrieval and validation of official sources. Crime periods and source publication dates are recorded in the datasets and source manifests.",
+          }
+          if monthly.exists():
+              monthly_payload = monthly.read_bytes()
+              json.loads(monthly_payload)
+              status["monthlyDatasetSha256"] = hashlib.sha256(monthly_payload).hexdigest()
+          pathlib.Path("public/data/refresh-status.json").write_text(
+              json.dumps(status, indent=2) + "\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Verify and build the static site
+        run: |
+          python scripts/refresh_data.py --validate-only
+          python scripts/refresh_monthly.py --validate-only
+          python -m unittest discover -s scripts -p 'test_*.py'
+          npm run typecheck
+          npm test
+          npm run build
+
+      - name: Check Cloudflare configuration when publication is enabled
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -z "$PAGES_PROJECT" ] || [ -z "$CF_TOKEN" ] || [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Optional app-code publication requires the Pages project variable and both deployment secrets. Data-only updates need no Cloudflare credentials."
+            exit 1
+          fi
+          if ! [[ "$PAGES_PROJECT" =~ ^[a-z0-9][a-z0-9-]{0,57}[a-z0-9]$ ]]; then
+            echo "::error::CLOUDFLARE_PAGES_PROJECT must be a valid Pages project name."
+            exit 1
+          fi
+
+      - name: Commit only changed publication data
+        id: snapshot
+        run: |
+          # Fail if someone changed the branch while the sources were collected.
+          # Never rebase or force-push a build that was verified against old code.
+          git fetch origin "$DEFAULT_BRANCH"
+          if [ "$(git rev-parse FETCH_HEAD)" != "$GITHUB_SHA" ]; then
+            echo "::error::The publication branch changed during this run. Start a fresh run."
+            exit 1
+          fi
+          git add -- public/data/crime.json public/data/source-manifest.json public/data/monthly.json public/data/monthly-manifest.json public/data/refresh-status.json
+          if ! git diff --cached --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "data: record successful official crime data check"
+            git push origin "HEAD:$DEFAULT_BRANCH"
+          fi
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # Data is consumed from the public repository, so scheduled runs need no
+      # deployment secret. Optional app-code deployment happens in this run:
+      # GITHUB_TOKEN pushes do not trigger another Actions workflow.
+      - name: Publish the verified directory to Cloudflare Pages
+        id: deploy
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4.136.3"
+          packageManager: npm
+          command: >-
+            pages deploy dist
+            --project-name=${{ vars.CLOUDFLARE_PAGES_PROJECT }}
+            --branch=${{ github.event.repository.default_branch }}
+            --commit-hash=${{ steps.snapshot.outputs.commit }}
+
+      - name: Verify the exact JSON files served by the new deployment
+        if: steps.deploy.outcome == 'success'
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          python - <<'PY'
+          import hashlib
+          import os
+          import pathlib
+          import time
+          import urllib.parse
+          import urllib.request
+
+          origin = os.environ["DEPLOYMENT_URL"].rstrip("/")
+          parsed = urllib.parse.urlparse(origin)
+          if parsed.scheme != "https" or not parsed.hostname or not parsed.hostname.endswith(".pages.dev"):
+              raise SystemExit("Cloudflare did not return a valid deployment URL")
+          for name in ("crime.json", "source-manifest.json", "monthly.json", "monthly-manifest.json", "refresh-status.json"):
+              expected = pathlib.Path("dist/data", name).read_bytes()
+              url = f"{origin}/data/{name}"
+              for attempt in range(6):
+                  try:
+                      request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          received = response.read()
+                      if hashlib.sha256(received).digest() == hashlib.sha256(expected).digest():
+                          print(f"Verified {name}")
+                          break
+                  except (OSError, TimeoutError):
+                      pass
+                  if attempt == 5:
+                      raise SystemExit(f"Deployed bytes could not be verified: {name}")
+                  time.sleep(5)
+          PY
+
+      - name: Report publication state
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          if [ -n "$DEPLOYMENT_URL" ]; then
+            echo "Verified publication: $DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Public data checked, verified and committed. The app reads these static JSON files directly; data-only updates need no Cloudflare deployment or secret." >> "$GITHUB_STEP_SUMMARY"
+          fi

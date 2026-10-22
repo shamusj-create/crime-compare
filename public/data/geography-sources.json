@@ -1,0 +1,30 @@
+{
+  "publisher": "Office for National Statistics",
+  "boundaryDate": "2024-12",
+  "generatedAt": "2026-10-22T13:24:47+00:00",
+  "licence": "Open Government Licence v3.0",
+  "licenceUrl": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "licensingGuidance": "https://www.ons.gov.uk/methodology/geography/licences",
+  "attribution": "Source: Office for National Statistics licensed under the Open Government Licence v.3.0. Contains OS data © Crown copyright and database right 2024.",
+  "sources": [
+    {
+      "title": "Police Force Areas (December 2024) Boundaries EW BGC",
+      "url": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Police_Force_Areas_Dec_2024_EW_BGC/FeatureServer/0",
+      "catalogueUrl": "https://www.data.gov.uk/dataset/977aac4f-29f6-4d63-8b8e-b5815038bc19/police-force-areas-december-2024-boundaries-ew-bgc"
+    },
+    {
+      "title": "Regions (December 2024) Boundaries EN BGC",
+      "url": "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Regions_December_2024_Boundaries_EN_BGC/FeatureServer/0",
+      "catalogueUrl": "https://www.arcgis.com/home/item.html?id=125a1e3fca4940e5941d85c585b96aba"
+    }
+  ],
+  "query": {
+    "f": "geojson",
+    "where": "1=1",
+    "outFields": "*",
+    "outSR": "27700",
+    "maxAllowableOffset": "300"
+  },
+  "processing": "ONS December 2024 BGC boundaries queried in British National Grid at 300m maximum allowable offset; polygons made valid, coastal components and holes below 1 km² removed, topology-preserving 650m simplification, projected uniformly into a 300 × 360 SVG viewBox. Wales and England/Wales outlines dissolved from police force polygons with all interior holes removed to prevent seams between independently generalised polygons. The City of London SVG adds a locator ring around its true shaded boundary because it is smaller than one avatar pixel.",
+  "purpose": "Visual orientation only. These simplified paths must not be used to assign crimes or addresses to areas."
+}

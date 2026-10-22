@@ -51,6 +51,12 @@ The canonical hostname is `https://crime.compare/`. Both apex and `www` serve th
 
 The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployment and monthly public-data updates. The default update route uses only GitHub's built-in repository token and needs no Cloudflare secret. The guide also covers optional automated code deployments.
 
+## Optional audience measurement
+
+A separate crime.compare GA4 property has been created; website activation is pending verification and publication. The [measurement release record](docs/ga4-measurement-release-2026-10-22.md) tracks its settings, consent checks and publication status. The owner can open the saved [Advertiser audience overview](https://analytics.google.com/analytics/web/#/a368143065p560206660/reports/reportinghub) using their existing Google access. The [private reporting guide](docs/analytics-advertiser-reporting.md) explains on-demand printable reports and spreadsheet exports once collection is verified and the period has settled.
+
+The planned collection requires prior opt-in, offers refusal and withdrawal, and removes URL searches and selections from reported page addresses. It uses standard GA4 with the existing static hosting, without a paid upgrade or extra runtime service. Analytics does not collect crime statistics or participate in the monthly source refresh. Publishing it must preserve the existing data and successful source-check record.
+
 ## Data and interpretation
 
 Police recorded crime measures offences recorded by police. Reporting behaviour, recording practices, legal changes and police activity affect the figures. The values do not measure every crime that happened, individual risk or police effectiveness. Population rates help compare differently sized areas; resident population does not fully capture commuters, tourists or local footfall.

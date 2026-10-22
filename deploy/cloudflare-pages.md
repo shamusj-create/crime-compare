@@ -19,6 +19,7 @@ The canonical hostname `https://crime.compare/` is Active with SSL enabled. HTTP
 | Monthly source collection | Standard GitHub-hosted Ubuntu runner in the public repository |
 | Scheduled deployment credentials | None; the workflow uses its built-in repository token |
 | Database, paid API or runtime server | None |
+| Optional audience measurement | Standard GA4; activation pending, no paid upgrade or extra runtime service |
 | Hostname | Free `*.pages.dev`; a custom domain is an optional annual purchase |
 
 Cloudflare lists unlimited static requests/bandwidth, 500 builds per month, one concurrent build, 20,000 files per site and 25 MiB per file. The application uses no Pages Functions, Workers, database or storage service. See [Pages pricing](https://www.cloudflare.com/developer-platform/products/pages/) and [current limits](https://developers.cloudflare.com/pages/platform/limits/).
@@ -113,6 +114,14 @@ Enter the token directly into GitHub's encrypted secret field. Keep it out of th
 An explicitly requested code publication fails before committing if any deployment setting is missing. When configured, it uploads the verified `dist/` in the same run and compares the live JSON bytes with the build. An upload failure does not erase the previous Cloudflare deployment. If upload succeeds but byte verification fails, inspect the deployment before retrying; the workflow does not call that result verified. Use [Cloudflare rollback](https://developers.cloudflare.com/pages/configuration/rollbacks/) for an incorrect app release.
 
 Rotate this optional token independently of any other site's credentials. The `politicians.compare` repository and deployment must not be modified by this setup.
+
+## Optional GA4 code publication
+
+Crime.compare has its own [GA4 property and saved Advertiser audience overview](https://analytics.google.com/analytics/web/#/a368143065p560206660/reports/reportinghub), separate from politicians.compare. Website activation is pending. The [measurement release record](../docs/ga4-measurement-release-2026-10-22.md) records confirmed settings and must receive the final code release, deployment and consent-verification evidence before collection is described as live. The [private report-pack guide](../docs/analytics-advertiser-reporting.md) covers on-demand reports; it adds no scheduled service or publication step.
+
+The intended setup loads Google Analytics only after permission, provides equally weighted allow/refuse choices and later withdrawal, and reports generic page addresses without searches, query parameters or fragments. The public privacy notice and footer must describe the actual collection. CSP changes must retain the existing `raw.githubusercontent.com` connection used for validated monthly data. The controller uses an essential shared preference cookie for apex/`www`, with same-origin storage events and one-second active-tab checks; browser timer delays and asynchronous loading require explicit withdrawal tests on both hosts.
+
+Publish analytics as an app-code release using the procedure above, preserving the existing statistics, manifests and `refresh-status.json` bytes. It needs no data regeneration, Google credential in GitHub Actions or change to the monthly refresh. Standard GA4 and the existing static hosting add no paid subscription or runtime service to this setup.
 
 ## Attach crime.compare to Pages
 

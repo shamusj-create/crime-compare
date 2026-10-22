@@ -1,0 +1,12 @@
+.audience-choice,.audience-manage{font-family:Arial,Helvetica,sans-serif;box-sizing:border-box;color:#17243a}
+.audience-choice{position:fixed;z-index:10000;right:16px;bottom:16px;width:min(450px,calc(100vw - 32px));padding:18px;background:#fff;border:1px solid #aab6c6;border-top:3px solid #0a3fb7;border-radius:4px;box-shadow:0 8px 35px #17243a26;text-align:left}
+.audience-choice strong{display:block;font-family:Georgia,serif;font-size:20px;font-weight:600;line-height:1.25}
+.audience-choice p{font-size:12px;line-height:1.6;margin:8px 0 14px;color:#526078}
+.audience-choice a{color:#0a3fb7;text-underline-offset:3px}.audience-choice .audience-message:empty{display:none}
+.audience-choice__actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.audience-choice button,.audience-manage{appearance:none;min-height:42px;padding:9px 12px;border:1px solid #aab6c6;border-radius:3px;background:#fff;color:#0a3fb7;font:600 12px Arial,Helvetica,sans-serif;cursor:pointer}
+.audience-choice button:hover,.audience-manage:hover{background:#f0f4ff;border-color:#0a3fb7}
+.audience-choice button:focus-visible,.audience-manage:focus-visible,.audience-choice a:focus-visible{outline:3px solid #0a3fb7;outline-offset:3px}
+.audience-manage{position:fixed;z-index:9999;left:12px;bottom:10px;min-height:34px;padding:6px 10px;box-shadow:0 3px 12px #17243a14;font-size:11px}
+.audience-manage[hidden]{display:none}
+@media(max-width:520px){.audience-choice{right:12px;left:12px;bottom:12px;width:auto;padding:15px}.audience-choice strong{font-size:19px}.audience-choice p{font-size:12px}.audience-choice__actions{gap:8px}}

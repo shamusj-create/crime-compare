@@ -2,7 +2,7 @@
 
 The dedicated GA4 property is **560206660**, in account **368143065**; the web stream is **16182898408** for `https://crime.compare`. Its public measurement ID is `G-6DZZ4SE8DG`. Reporting uses the **numeric property ID**, not the measurement ID. [Open the source property](https://analytics.google.com/analytics/web/#/p560206660/reports/intelligenthome).
 
-This is an on-demand reporting tool, **not an audience claim or a claim that collection is already healthy**. No historical audience is recovered by creating a property, and no real advertiser report has been generated as part of this implementation. The release record must verify consent-gated production collection before a first complete measurement day is used.
+This is an on-demand reporting tool, **not an audience claim or a guarantee of continuous collection health**. The [release record](ga4-measurement-release-2026-10-22.md) documents verified consent-gated production transport and sanitization on 22 October 2026, making 23 October the first complete measurement day. No historical audience is recovered by creating a property, and no real advertiser report has been generated as part of this implementation. Check actual collection health throughout each report period before using its figures.
 
 `scripts/report_ga4_audience.py` produces a private pack containing printable, self-contained HTML, Markdown, JSON, the aggregate source bundle and nine CSV tables. It uses only Python's standard library. It adds no website payload, database, recurring job, paid reporting dependency, advertising integration or reader-level export. It sends no report to an advertiser and never creates or saves Google credentials.
 
@@ -35,7 +35,7 @@ The consent controller and report allowlist share these exact virtual paths and 
 | `/sources` | `Sources` |
 | `/privacy` | `Privacy` |
 
-The physical home page maps to `/official/forces`; `/` is not an additional measured page. Switching official/monthly source or region/force geography can create a coarse page view. Crime types, individual areas, ONS codes, comparisons, searches, filters, profiles and selections are not sent. No custom interaction events are required for this pack. Referrers are reduced to their origin by the controller; query strings, fragments and referring page paths are not part of its measurement contract.
+The physical home page maps to `/official/forces`; `/` is not an additional measured page. Actual apex and `www` visits deliberately use canonical `page_location` values under `https://crime.compare`, so the exact reporting hostname includes both; preview hosts are not measured. Switching official/monthly source or region/force geography can create a coarse page view. Crime types, individual areas, ONS codes, comparisons, searches, filters, profiles and selections are not sent. No custom interaction events are required for this pack. Referrers are reduced to their origin by the controller; query strings, fragments and referring page paths are not part of its measurement contract.
 
 The report rejects unapproved detailed paths and query strings. An unknown GA4 page-context bucket is retained as `Unclassified` and marked for review. Section shares describe visited site sections; country reports describe the visitor-country classification returned by GA4. They do not establish residence, nationality, which local crime figures someone researched or any personal circumstances. URL sanitisation means this setup is not evidence for detailed UTM campaign attribution or advertiser conversions.
 
@@ -45,9 +45,9 @@ Before sharing, verify the actual production release and collection settings. Th
 
 A full pack covers **28 complete Europe/London calendar days**, allowing at least **48 elapsed hours after the last day finishes** for processing. Earlier settled dates can be selected with `--start` and `--end`. The first period can be shorter, but is prominently labelled **Provisional** and never extrapolated into a monthly readership estimate.
 
-`--measurement-start` means the first complete **verified production** measurement day. It is not the property-creation date. If collection is deployed and verified partway through 22 October 2026, use **23 October 2026**. Move the date if the actual release or verification happens later. Do not enter pre-installation or partial days as zero traffic.
+`--measurement-start` means the first complete **verified production** measurement day. It is not the property-creation date or partial setup day. Production verification finished on 22 October 2026, so use **23 October 2026**. Do not enter pre-installation or partial days as zero traffic.
 
-Subject to that verified start and continuous collection health, the earliest settled periods are:
+Subject to that verified start and collection health throughout the period, the earliest settled periods are:
 
 | Period | Earliest eligibility with the 48-hour allowance |
 | --- | --- |
@@ -61,7 +61,7 @@ The tool rejects wrong hostname/timezone filters, dates before measurement, imma
 
 ## Read-only API workflow
 
-The default property ID is `560206660`; `--property-id` or the non-secret `CRIME_GA4_PROPERTY_ID` environment variable can override it. The report always filters hostname exactly to `crime.compare`. `--measurement-start` remains explicit so the operator must use the verified release day.
+The default property ID is `560206660`; `--property-id` or the non-secret `CRIME_GA4_PROPERTY_ID` environment variable can override it. The report always filters hostname exactly to `crime.compare`. `--measurement-start` remains explicit so the operator must use the first complete verified production measurement day, 23 October 2026, rather than the partial setup day.
 
 The Google user needs property Viewer access or greater, an enabled Analytics Data API project and the `analytics.readonly` OAuth scope. An existing browser login does not grant the script an OAuth token. The helper does not provision accounts, keys or credentials. Google's [user-account quickstart](https://developers.google.com/analytics/devguides/reporting/data/v1/quickstart) describes authentication.
 
@@ -109,7 +109,7 @@ Prepare normalized private CSV copies using these exact columns, in order. Case,
 | `content_groups.csv` | `contentGroup,screenPageViews,totalUsers` |
 | `returning.csv` | `newVsReturning,totalUsers` — preserve `new`, `returning` and unknown rows as exported |
 
-Create a private manifest alongside the CSVs. This is a **schema example, not an audience observation**. Its dates assume a verified first full day of 23 October; replace them if the release differs. Quality booleans must reflect checks actually performed, not values copied unquestioningly:
+Create a private manifest alongside the CSVs. This is a **schema example, not an audience observation**. Its measurement start is the verified first full day, 23 October. Use the actual dates of the settled period you are reporting. Quality booleans must reflect checks actually performed, not values copied unquestioningly:
 
 ```json
 {
@@ -148,7 +148,7 @@ Every generated pack is a **private draft pending review**, even if its data-qua
 
 The implementation follows Google's [dimensions and metrics](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema), [`runReport` contract](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/properties/runReport) and [response quality metadata](https://developers.google.com/analytics/devguides/reporting/data/v1/rest/v1beta/ResponseMetaData). Its API dimensions do not request city, age, gender, page titles, query strings, referring page URLs, search terms, user IDs or event-level records.
 
-Verification is offline and uses synthetic test fixtures only:
+The report helper's automated tests are offline and use synthetic fixtures only:
 
 ```sh
 python3 -m unittest discover -s scripts -p 'test_report_ga4_audience.py' -v

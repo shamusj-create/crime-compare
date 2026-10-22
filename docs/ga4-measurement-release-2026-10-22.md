@@ -2,7 +2,7 @@
 
 ## Status
 
-The dedicated Google Analytics property, consent controller and privacy notice are deployed from [commit `a7ff826`](https://github.com/shamusj-create/crime-compare/commit/a7ff826) in Cloudflare deployment `77451b43`. [CI run 39810368507](https://github.com/shamusj-create/crime-compare/actions/runs/39810368507) passed. Live refusal and layout checks passed. **The operator's live opt-in collection test remains pending: successful Google collection, collection health and the first complete measurement day are not yet verified.**
+The dedicated Google Analytics property, consent controller and privacy notice are deployed from [commit `a7ff826`](https://github.com/shamusj-create/crime-compare/commit/a7ff826) in Cloudflare deployment `77451b43`. [CI run 39810368507](https://github.com/shamusj-create/crime-compare/actions/runs/39810368507) passed. User-approved live tests on 22 October 2026 verified consent-gated collection transport, sanitized manual page views and cross-host withdrawal after correcting Google's saved stream settings. **The first complete measurement day is 23 October 2026.** This verification establishes the tested flow, not uninterrupted future collection or an audience count.
 
 ## Confirmed configuration
 
@@ -15,7 +15,7 @@ The dedicated Google Analytics property, consent controller and privacy notice a
 | Public measurement ID | G-6DZZ4SE8DG |
 | Reporting timezone | Europe/London, shown as United Kingdom Time |
 | Currency | GBP |
-| Enhanced measurement | Off |
+| Enhanced measurement | Off; individual interactions and advanced history disabled, saved and rechecked after a full settings reload |
 | Google Signals | Off |
 | User-provided data collection | Off |
 | Advertising personalization | Allowed in 0 of 307 regions |
@@ -31,7 +31,7 @@ These are property-specific settings. They were checked independently of the sis
 
 ## Consent and data minimisation
 
-The deployed controller follows the sister site's prior opt-in approach: no Google resources before permission, equally weighted allow/refuse buttons, a versioned choice expiring after 180 days, and a persistent way to change or withdraw consent. Advertising consent fields remain denied. Successful post-consent collection still requires the pending live test.
+The deployed controller follows the sister site's prior opt-in approach: no Google resources before permission, equally weighted allow/refuse buttons, a versioned choice expiring after 180 days, and a persistent way to change or withdraw consent. Advertising consent fields remain denied. Fresh live tests verified successful post-consent collection and withdrawal.
 
 The measurement contract permits only seven generic paths: `/official/forces`, `/official/regions`, `/monthly/forces`, `/monthly/regions`, `/method`, `/sources` and `/privacy`. Event addresses use the canonical `https://crime.compare` origin. Titles are fixed; searches, query parameters, fragments, crime categories, individual areas and profile selections are excluded. Referrers are reduced to origins. Changing a crime filter must not create a duplicate page view; changing the broad source or geography can create one.
 
@@ -49,10 +49,23 @@ The 12 controller lifecycle/privacy tests passed, including asynchronous-load wi
 
 Live app and privacy checks found zero Google requests before consent and after **No thanks** followed by reload. The owner/test control was set before acceptance; `www` observed the shared declined choice and owner marker. At 390 × 844, the prompt had no horizontal overflow and both choices were equally sized, 42 pixels high. Desktop proof is `artifacts/analytics-2026-10-22/consent-desktop.jpg`. Scripts, configuration, data and manifests matched the build. Cloudflare transforms the privacy page's two email links and adds its same-origin email-decoding script; that expected transformation explains its HTML byte difference.
 
-The live opt-in collection test is still pending. It must verify the Google response, safe event addresses, filter deduplication and post-acceptance withdrawal before collection is described as healthy. The first complete verified measurement day remains **unset**.
+The initial opt-in test caught automatic history page views carrying detailed URLs: the Enhanced Measurement master was still on despite the setting attempted during stream creation. The activation gate failed. All six optional interactions and advanced browser-history measurement were then disabled and saved, the master was turned off, and a full settings reload confirmed persistence. There were zero connected site tags. No controller change or code deployment was needed. Google's [page-view guidance](https://developers.google.com/analytics/devguides/collection/ga4/views) confirms that `send_page_view: false` alone does not disable Enhanced Measurement history events.
+
+Fresh cache-disabled tests after that correction passed:
+
+- The Google tag returned 200; collection returned 204 for canonical `https://crime.compare/monthly/forces`, with `traffic_type=internal` and `debug_mode=true`.
+- Changing crime type and search, then opening and closing an area profile, produced no additional page view, including after a 12-second delayed flush. No query string or profile identifier appeared in those events.
+- Switching to the official source and then regions produced exactly two manual views: `/official/forces` and `/official/regions`.
+- A fresh `www` privacy visit returned 204 using canonical `/privacy` and the owner/test flags.
+- Withdrawing through `www` changed the shared choice to declined and removed accessible Analytics cookies on both hosts. A subsequent coarse comparison switch on the apex and activity on `www` produced no Google requests.
+- A final monitor lasting more than 10 seconds found zero Google requests on both hosts; reloading the declined apex also produced zero. Accessible GA cookie counts remained zero on both hosts.
+
+The setup browser was left marked as owner/test and hard excluded, with temporary cache overrides restored. Local QA evidence is saved under ignored `artifacts/analytics-2026-10-22/`: `collection-verification.json`, `verified-browser-excluded.jpg` and `enhanced-measurement-off.jpg`.
+
+The setup now has verified initial transport and consent behaviour. Reporting still requires collection-health checks throughout each selected period; a 204 response is not a completed audience report. The production runbook includes the saved-settings and live-payload regression gates, because offline controller tests do not verify Google's remote configuration.
 
 ## Reports
 
 The property is separate from politicians.compare, so its readership remains separate. Native GA4 reports and exports use the existing Google login. The [private reporting guide](analytics-advertiser-reporting.md) explains `scripts/report_ga4_audience.py`, its read-only API route using existing credentials and its browser-export fallback. The standard-library helper creates printable HTML, Markdown, JSON and CSVs privately, with source hashes, scope and quality checks. It sends nothing to an advertiser and creates no Google credentials or recurring task. Its 23 offline reporting tests passed; no real audience report has been generated.
 
-Creating the property does not recover historical GA4 traffic. Reporting must use the actual first complete verified measurement day and allow at least 48 elapsed hours after a selected period ends for Google processing. If deployment and verification finish on 22 October, the first full day is 23 October: a one-day provisional report is eligible on 26 October, and the first 28-day period, 23 October–19 November, on 22 November. These dates remain conditional on verified activation and collection health.
+Creating the property does not recover historical GA4 traffic. The first complete verified measurement day is 23 October 2026; 22 October is a partial setup/test day. Allow at least 48 elapsed hours after a selected period ends for Google processing. A one-day provisional report for 23 October is eligible on 26 October; the first 28-day period, 23 October–19 November, on 22 November. These are eligibility dates, subject to collection health and processing, rather than promises of usable audience figures.

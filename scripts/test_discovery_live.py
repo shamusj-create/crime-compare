@@ -104,7 +104,13 @@ class DiscoveryLiveTests(unittest.TestCase):
 
     def test_unexpected_external_script_is_rejected(self):
         self.remote['/'] = self.remote['/'].replace(b'</body>', b'<script src="https://example.test/extra.js"></script></body>')
-        self.assert_rejected('unexpected published script')
+        with self.assertRaises(live.VerificationError) as caught:
+            live.verify(self.site, fetcher=self.fetch)
+        self.assertEqual(
+            str(caught.exception),
+            '/: unexpected published script; expected=["/audience.js"]; '
+            'received=["/audience.js", "https://example.test/extra.js"]',
+        )
 
     def test_event_handler_and_inline_executable_script_are_rejected(self):
         for injection in [b'<img src="/bad.png" onerror="alert(1)">', b'<script>alert(1)</script>']:

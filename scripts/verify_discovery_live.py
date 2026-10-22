@@ -222,7 +222,11 @@ def compare_pages(expected: Page, actual: Page, route: str, record: dict) -> Non
             raise VerificationError(f"{route}: published {name} differs from the verified build")
     actual_scripts = [source for source in actual.scripts if not CF_EMAIL_SCRIPT.fullmatch(source)]
     if actual_scripts != expected.scripts:
-        raise VerificationError(f"{route}: unexpected published script")
+        raise VerificationError(
+            f"{route}: unexpected published script; "
+            f"expected={json.dumps(expected.scripts, ensure_ascii=True)}; "
+            f"received={json.dumps(actual.scripts, ensure_ascii=True)}"
+        )
 
 
 def sitemap_records(raw: bytes) -> list[tuple[str, str | None]]:

@@ -6,6 +6,8 @@ The scheduled GitHub workflow updates the repository’s data and rebuilds the c
 
 ## Current release
 
+The discovery release is `e425f87`, deployment `5bd347ba`, with [passing CI](https://github.com/shamusj-create/crime-compare/actions/runs/39827868778) and live checks of all 84 pages on the deployment and production origins. Automatic static uploads are implemented but await approval to create and store the dedicated Pages edit token. The original monthly data route remains active until the project variable is configured. See the [discovery release guide](../docs/discoverability.md).
+
 The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime.compare](https://crime.compare/), [www.crime.compare](https://www.crime.compare/) and [crime-compare.pages.dev](https://crime-compare.pages.dev/). Metadata release `17f803a` is verified in deployment `ca0865e4` and passed [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722).
 
 The canonical hostname `https://crime.compare/` is Active with SSL enabled. HTTPS checks matched HTML, assets, dataset/status hashes, robots and sitemap to the deployed build. `www.crime.compare` also returns HTTPS 200 with matching HTML and the apex canonical URL. Both HTTP hosts redirect to their corresponding HTTPS host, preserving queries. Cloudflare Registrar confirmed the US$25.20 one-year purchase on 22 October 2026; expiry is 22 October 2027, with auto-renew enabled and currently quoted at US$25.20/year. The following instructions serve as a rebuild/recovery runbook.

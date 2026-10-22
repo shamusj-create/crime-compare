@@ -57,3 +57,14 @@ The first opt-in test failed its activation gate because Enhanced Measurement wa
 Final delayed monitoring for more than 10 seconds found zero Google requests on both hosts, and reloading the declined apex also produced zero. The setup browser was left owner/test marked and hard excluded; cache overrides were restored. Local evidence is in ignored `artifacts/analytics-2026-10-22/collection-verification.json`, `verified-browser-excluded.jpg` and `enhanced-measurement-off.jpg`.
 
 **The first complete verified measurement day is 23 October 2026.** These tests establish initial transport, sanitization and consent behaviour; ongoing collection health must be checked for every reporting period. No real advertiser report or historical audience claim has been generated.
+
+
+## Discoverability release, 22 October 2026
+
+Code commit `e425f8728fca52622bbf23f52e9aa4c096b56bb6`, Cloudflare deployment `5bd347ba`; [CI run 39827868778](https://github.com/shamusj-create/crime-compare/actions/runs/39827868778) passed. Both published snapshot validators, 81 Python tests, 34 Node tests, TypeScript and the production build passed. No file under `public/data/` changed in the release.
+
+The generated set contains 84 canonical URLs, including 43 force profiles, ten regional profiles, 25 category pages, two directories, methodology, sources, root and privacy. All pages passed live semantic verification against the build at both `5bd347ba.crime-compare.pages.dev` and `crime.compare`, along with exact manifest/social-image checks and sitemap URL/date checks. An independent audit reconciled 2,650 HTML table rows with the validated source data, including rate denominators, JavaScript rounding and suppressed percentages.
+
+Desktop and 390×844 browser checks covered force/category/directory layouts and bounded table scrolling. A Cleveland page linked into the correct interactive profile with the matching count and rate; dynamic metadata and the apex canonical remained correct. Screenshots are in ignored `artifacts/discoverability-2026-10-22/`. Temporary browser viewport overrides were reset.
+
+Standalone discovery pages load no analytics. The controller’s seven coarse virtual paths remain unchanged; a regression test protects detailed routes, and privacy/report limitations explain the unmeasured coverage. The monthly static publishing workflow is ready but its new persistent credential awaits owner approval. The absent project variable preserves the original free monthly data-only route until setup is complete. Search engines and social services still need to recrawl; no indexing, rank or Search Console/Bing ownership setup is claimed.

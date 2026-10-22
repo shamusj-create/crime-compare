@@ -180,7 +180,7 @@ jobs:
               url = f"{origin}/data/{name}"
               for attempt in range(6):
                   try:
-                      request = urllib.request.Request(url, headers={"Cache-Control": "no-cache"})
+                      request = urllib.request.Request(url, headers={"Cache-Control": "no-cache", "User-Agent": "Mozilla/5.0 CrimeLedger deployment verification"})
                       with urllib.request.urlopen(request, timeout=30) as response:
                           received = response.read()
                       if hashlib.sha256(received).digest() == hashlib.sha256(expected).digest():

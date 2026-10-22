@@ -58,13 +58,13 @@ Alternatively, use Cloudflare's official Wrangler CLI with the operator's existi
 
 ```bash
 npx wrangler@4.136.3 login
-npx wrangler@4.136.3 pages project create crime-compare --production-branch main
+npx wrangler@4.136.3 pages project create crime-compare --production-branch main --force
 npx wrangler@4.136.3 pages deploy dist --project-name crime-compare --branch main
 ```
 
 The committed `wrangler.jsonc` points to `dist/` and contains no account identifier or secret. Change its `name` if you choose a different project name.
 
-This is a Direct Upload project: no Cloudflare GitHub integration is needed. Cloudflare documents that it cannot later be converted into a Git-integrated project; a new project would be required. See [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).
+The `--force` flag on initial project creation selects the existing Pages platform when Wrangler otherwise delegates a new project to Workers. It is only for creation; the normal upload command above needs no such flag. This is a Direct Upload project: no Cloudflare GitHub integration is needed. Cloudflare documents that it cannot later be converted into a Git-integrated project; a new project would be required. See [Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/).
 
 Verify the Pages production address, interface, source periods, raw source links and remote-data/fallback behaviour. Code releases require another static upload; monthly data commits are consumed by the existing application.
 

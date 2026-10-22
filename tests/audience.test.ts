@@ -106,6 +106,16 @@ test('privacy path is generic on www and unknown paths never load Google', () =>
   assert.equal(harness({ initial: saved(), pathname: '/unknown/private' }).head.length, 0)
 })
 
+test('crawlable discovery routes do not load Google or disclose area and crime slugs', () => {
+  for (const pathname of ['/areas/', '/areas/E23000013/', '/crime/', '/crime/homicide/', '/methodology/', '/sources/']) {
+    const run = harness({ initial: saved(), pathname, search: '?q=private-name' })
+    run.load()
+    assert.equal(run.head.length, 0)
+    assert.equal(run.views().length, 0)
+    assert.equal(run.commands().length, 0)
+  }
+})
+
 test('withdrawal during async loading prevents configuration and page views', () => {
   const run = harness(); run.choose('allow'); run.choose('reject'); run.load()
   assert.equal(run.views().length, 0)

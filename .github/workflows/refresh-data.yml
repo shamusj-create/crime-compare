@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
     inputs:
       publish:
-        description: "Also publish app code to Cloudflare (requires optional deployment secrets)"
+        description: "Publish the verified app and discovery pages to Cloudflare"
         type: boolean
         required: true
-        default: false
+        default: true
 
 permissions:
   contents: read
@@ -97,6 +97,9 @@ jobs:
           )
           PY
 
+      - name: Regenerate dated discovery pages from validated snapshots
+        run: python scripts/build_discovery_pages.py --write-manifest
+
       - name: Verify and build the static site
         run: |
           python scripts/refresh_data.py --validate-only
@@ -107,13 +110,13 @@ jobs:
           npm run build
 
       - name: Check Cloudflare configuration when publication is enabled
-        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        if: (github.event_name == 'schedule' && env.PAGES_PROJECT != '') || inputs.publish
         env:
           CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           if [ -z "$PAGES_PROJECT" ] || [ -z "$CF_TOKEN" ] || [ -z "$CF_ACCOUNT" ]; then
-            echo "::error::Optional app-code publication requires the Pages project variable and both deployment secrets. Data-only updates need no Cloudflare credentials."
+            echo "::error::Monthly discovery publication requires the Pages project variable and both deployment secrets. No unverified build will be published."
             exit 1
           fi
           if ! [[ "$PAGES_PROJECT" =~ ^[a-z0-9][a-z0-9-]{0,57}[a-z0-9]$ ]]; then
@@ -121,7 +124,7 @@ jobs:
             exit 1
           fi
 
-      - name: Commit only changed publication data
+      - name: Commit only verified publication data and discovery manifest
         id: snapshot
         run: |
           # Fail if someone changed the branch while the sources were collected.
@@ -131,21 +134,21 @@ jobs:
             echo "::error::The publication branch changed during this run. Start a fresh run."
             exit 1
           fi
-          git add -- public/data/crime.json public/data/source-manifest.json public/data/monthly.json public/data/monthly-manifest.json public/data/refresh-status.json
+          git add -- public/data/crime.json public/data/source-manifest.json public/data/monthly.json public/data/monthly-manifest.json public/data/refresh-status.json public/discovery-manifest.json
           if ! git diff --cached --quiet; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git commit -m "data: record successful official crime data check"
+            git commit -m "data: refresh validated snapshots and discovery metadata"
             git push origin "HEAD:$DEFAULT_BRANCH"
           fi
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
-      # Data is consumed from the public repository, so scheduled runs need no
-      # deployment secret. Optional app-code deployment happens in this run:
+      # Publish static discovery HTML in the same verified job as the data.
       # GITHUB_TOKEN pushes do not trigger another Actions workflow.
+      # The app also retains its integrity-checked raw GitHub data route.
       - name: Publish the verified directory to Cloudflare Pages
         id: deploy
-        if: github.event_name == 'workflow_dispatch' && inputs.publish
+        if: (github.event_name == 'schedule' && env.PAGES_PROJECT != '') || inputs.publish
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -193,6 +196,14 @@ jobs:
                   time.sleep(5)
           PY
 
+      - name: Verify crawlable pages and metadata
+        if: steps.deploy.outcome == 'success'
+        env:
+          DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
+        run: |
+          python scripts/verify_discovery_live.py --origin "$DEPLOYMENT_URL"
+          python scripts/verify_discovery_live.py --origin https://crime.compare --all
+
       - name: Report publication state
         env:
           DEPLOYMENT_URL: ${{ steps.deploy.outputs.deployment-url }}
@@ -200,5 +211,5 @@ jobs:
           if [ -n "$DEPLOYMENT_URL" ]; then
             echo "Verified publication: $DEPLOYMENT_URL" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "Public data checked, verified and committed. The app reads these static JSON files directly; data-only updates need no Cloudflare deployment or secret." >> "$GITHUB_STEP_SUMMARY"
+            echo "Public data checked, verified and committed. This manual data-only run did not publish static discovery HTML; select publication to update those pages." >> "$GITHUB_STEP_SUMMARY"
           fi

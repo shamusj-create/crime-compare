@@ -6,10 +6,12 @@
   "engines": { "node": ">=22.12.0" },
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "tsc -b && vite build",
+    "build": "python3 scripts/build_discovery_pages.py --check && tsc -b && vite build && python3 scripts/build_discovery_pages.py --output dist",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc -b --pretty false",
     "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "refresh:discovery": "python3 scripts/build_discovery_pages.py --write-manifest",
+    "check:discovery": "python3 scripts/build_discovery_pages.py --check",
     "refresh:data": "python3 scripts/refresh_data.py",
     "validate:data": "python3 scripts/refresh_data.py --validate-only"
   },

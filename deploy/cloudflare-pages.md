@@ -2,7 +2,7 @@
 
 Cloudflare Pages serves the static application. A dedicated public GitHub repository holds the app and its validated JSON snapshots. The hosted app fetches those public static files and falls back to the data packaged with its last code deployment if the remote snapshot is unavailable or fails integrity checks.
 
-The scheduled GitHub workflow updates the repository's data. **Monthly data publication needs no Cloudflare secret, GitHub app installation or code redeployment.** App-code releases are a separate operation.
+The scheduled GitHub workflow updates the repository’s data and rebuilds the crawlable discovery pages, then uploads the verified static build to the existing Pages project. The interactive comparison also retains its integrity-checked public GitHub data route. Static search pages need a deployment to update; their dates always describe the actual observations.
 
 ## Current release
 
@@ -17,7 +17,7 @@ The canonical hostname `https://crime.compare/` is Active with SSL enabled. HTTP
 | Static application | Cloudflare Pages Free plan |
 | Public data snapshots | Static files in the public GitHub repository |
 | Monthly source collection | Standard GitHub-hosted Ubuntu runner in the public repository |
-| Scheduled deployment credentials | None; the workflow uses its built-in repository token |
+| Scheduled deployment credentials | A dedicated account-scoped Pages edit token stored as an encrypted GitHub repository secret; built-in repository token for snapshot commits |
 | Database, paid API or runtime server | None |
 | Optional audience measurement | Standard GA4; no paid upgrade or extra runtime service |
 | Hostname | Free `*.pages.dev`; a custom domain is an optional annual purchase |
@@ -50,6 +50,7 @@ After reviewing the source snapshots, run:
 npm ci
 npm run typecheck
 npm test
+npm run refresh:discovery
 VITE_DATA_BASE_URL=https://raw.githubusercontent.com/shamusj-create/crime-compare/main/public/data npm run build
 ```
 
@@ -77,15 +78,16 @@ Verify the Pages production address, interface, source periods, raw source links
 
 ## 4. Enable and verify monthly updates
 
-In GitHub **Actions → Refresh public crime data → Run workflow**, select `main` and leave **Also publish app code** disabled. No repository secret or Cloudflare variable is required.
+In GitHub **Actions → Refresh public crime data → Run workflow**, select `main` and leave **Publish the verified app and discovery pages to Cloudflare** enabled. Scheduled runs publish the verified build when the Pages project variable is configured. Without that variable, the original data-only monthly route continues; the deployed discovery HTML remains its explicitly dated snapshot. A manual data-only run remains available for recovery, but does not update the static discovery pages.
 
 The job:
 
 1. Retrieves and validates the official quarterly England and Wales sources.
 2. Refreshes the separate monthly police.uk data layer.
 3. Writes `refresh-status.json` with the successful check time, updated/unchanged result, official dataset hash and monthly dataset hash. Observation periods and source publication dates remain separate.
-4. Runs both offline validators, Python tests, type checks, app tests and the static build.
-5. Rejects a branch that moved during the run, then commits only changed `crime.json`, `source-manifest.json`, `monthly.json`, `monthly-manifest.json` and `refresh-status.json`. It never force-pushes.
+4. Rebuilds the semantic discovery manifest from the validated snapshots; unchanged content retains its previous modification date. Runs both offline validators, Python tests, type checks, app tests and the static build.
+5. Checks deployment configuration before publication. Rejects a branch that moved during the run, then commits only changed data files and `public/discovery-manifest.json`. It never force-pushes.
+6. Uploads the verified `dist/` to the existing Pages project in the same run and checks the live JSON, sitemap, discovery manifest, representative initial HTML pages and social preview.
 
 A download, parsing, validation, test, build or push failure stops publication. The preceding complete remote snapshot and the existing Cloudflare app remain available. After a successful run, verify that the public raw JSON files contain the new status/hash set and that the live app loads the same values. A complete refresh is published by one Git commit.
 
@@ -95,25 +97,23 @@ GitHub schedules are best effort: runs can be delayed or dropped, and public sch
 
 No second push-triggered workflow is required. GitHub's [restriction on workflows triggered by `GITHUB_TOKEN` pushes](https://docs.github.com/en/actions/concepts/security/github_token) therefore does not interrupt this update route.
 
-## Optional: automate app-code releases
+## Automatic static publication credentials
 
-The same workflow can upload a newly verified app build on a **manual** run when **Also publish app code** is enabled. Scheduled data checks never use Cloudflare credentials.
+The monthly workflow uses a dedicated Cloudflare API token with **Account → Cloudflare Pages → Edit**, restricted to the intended Cloudflare account. Cloudflare’s available scope grants account-level Pages access; it cannot be restricted to this single project. The workflow explicitly selects `crime-compare`. It has no DNS, Registrar, billing or analytics permission.
 
-To enable that option, create a dedicated Cloudflare API token with **Account → Cloudflare Pages → Edit**, restricted to the intended Cloudflare account. This normal scope grants account-level Pages access; the project name selects the destination. Do not claim a one-project token restriction unless your account provides one.
-
-Under GitHub **Settings → Secrets and variables → Actions**, add:
+Under GitHub **Settings → Secrets and variables → Actions**, configure:
 
 | Kind | Name | Value |
 |---|---|---|
 | Repository secret | `CLOUDFLARE_API_TOKEN` | Dedicated Pages deployment token |
-| Repository secret | `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account identifier |
-| Repository variable | `CLOUDFLARE_PAGES_PROJECT` | Exact dedicated project name, e.g. `crime-compare` |
+| Repository secret | `CLOUDFLARE_ACCOUNT_ID` | Existing Cloudflare account identifier |
+| Repository variable | `CLOUDFLARE_PAGES_PROJECT` | `crime-compare` |
 
-Enter the token directly into GitHub's encrypted secret field. Keep it out of the repository, command history, data and browser bundle. See [Cloudflare's CI guide](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
+Set the Pages project variable last, after both encrypted secrets are present; this enables scheduled static uploads without interrupting the original data-only route during setup. Keep the token out of the repository, logs, command history and browser bundle. Cloudflare scope is broader than one project, so treat workflow changes as access to the account’s Pages sites. Rotate or revoke it independently of other credentials. See [Cloudflare’s CI guide](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
 
-An explicitly requested code publication fails before committing if any deployment setting is missing. When configured, it uploads the verified `dist/` in the same run and compares the live JSON bytes with the build. An upload failure does not erase the previous Cloudflare deployment. If upload succeeds but byte verification fails, inspect the deployment before retrying; the workflow does not call that result verified. Use [Cloudflare rollback](https://developers.cloudflare.com/pages/configuration/rollbacks/) for an incorrect app release.
+A scheduled or requested publication fails before committing if deployment configuration is missing. It uploads only after validation and a verified build. A failed upload leaves the preceding Cloudflare deployment available; the interactive app may already see the complete newly committed public data snapshot. If live verification fails, inspect the deployment before retrying, and use [Cloudflare rollback](https://developers.cloudflare.com/pages/configuration/rollbacks/) for an incorrect app release. Run the job again to repair a publication interrupted after the data commit.
 
-Rotate this optional token independently of any other site's credentials. The `politicians.compare` repository and deployment must not be modified by this setup.
+The monthly schedule and standard public GitHub runner add no paid service. The `politicians.compare` repository and deployment are unchanged. Do not copy its credentials into this repository.
 
 ## Optional GA4 code publication
 

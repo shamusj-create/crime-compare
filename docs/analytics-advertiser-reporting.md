@@ -19,6 +19,8 @@ This is an on-demand reporting tool, **not an audience claim or a guarantee of c
 | Which broad content is viewed? | Official/monthly comparison and reference-section shares, plus seven approved coarse virtual page paths |
 | Can the report be checked? | Property, period, London timezone, export time, exact queries, response quality metadata, source hashes and reconciled totals |
 
+Standalone discovery pages under `/areas/`, `/crime/`, `/methodology/` and `/sources/` do not load analytics. Readers become measurable only after opening the interactive comparison and consenting, or on the existing consent-enabled privacy page. These reports therefore cover the measured comparison/reference views, not every visit to every public HTML page.
+
 These figures describe consenting measured browsers, not certified unique humans, crime-area interests, ad inventory or delivered advertising impressions. Views cannot establish an advertisement's viewability, clicks, campaign reach or conversions. Actual paid placements require their own delivery measurement. No arbitrary “human percentage”, uplift for declined consent, monthly extrapolation, age, gender, occupation, wealth or inferred interest is added.
 
 ## Measurement contract

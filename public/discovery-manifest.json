@@ -1,0 +1,679 @@
+{
+  "baseUrl": "https://crime.compare",
+  "pages": {
+    "/": {
+      "contentSha256": "658b1f66c5cc62e64f3e44566f6306425ac9f23015358ba6562e6d923de6360f",
+      "description": "Compare police-recorded crime across England and Wales by police force area, region and crime type. Read dated counts, population rates and official evidence.",
+      "kind": "home",
+      "lastmod": "2026-10-22",
+      "path": "index.html",
+      "title": "Compare crime in England and Wales — CrimeLedger"
+    },
+    "/areas/": {
+      "contentSha256": "d2a53690307f922553267b7a357b1c974f7f7aa2eb1cf7fa46f6ea2cc6c35b50",
+      "description": "Find crime statistics for police force areas and regions across England and Wales. Explore counts, population rates, source dates and comparison notes.",
+      "kind": "area-directory",
+      "lastmod": "2026-10-22",
+      "path": "areas/index.html",
+      "title": "Police force areas and regions — CrimeLedger"
+    },
+    "/areas/E12000001/": {
+      "contentSha256": "35463309ac7de015df05e1953ccafb770ffb13e064a2bfb062eadb15afb33826",
+      "description": "Police-recorded crime for the North East regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000001/index.html",
+      "title": "North East: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000002/": {
+      "contentSha256": "3af0387abdbdbc23793d175c6ffba71ec2e20b656aeab5862f6545652258027a",
+      "description": "Police-recorded crime for the North West regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000002/index.html",
+      "title": "North West: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000003/": {
+      "contentSha256": "da2bbc913efd2bc019dcd480df2e248dc79ba3d619f53f082a8f18fc96e453ad",
+      "description": "Police-recorded crime for the Yorkshire and The Humber regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000003/index.html",
+      "title": "Yorkshire and The Humber: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000004/": {
+      "contentSha256": "1aed1b9b9b280405f5cba04c74ba3fffee2dfa635e991484776aac5d4d55d078",
+      "description": "Police-recorded crime for the East Midlands regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000004/index.html",
+      "title": "East Midlands: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000005/": {
+      "contentSha256": "37614887b3a733d3889ca1c6ec5583798c2dd5ace8193a6b42b7622b9bea084a",
+      "description": "Police-recorded crime for the West Midlands regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000005/index.html",
+      "title": "West Midlands: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000006/": {
+      "contentSha256": "4233b0aa74aa99ccacf4fbe2c8714401daa7c2e640b531d142a91714799103c2",
+      "description": "Police-recorded crime for the East of England regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000006/index.html",
+      "title": "East of England: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000007/": {
+      "contentSha256": "be6bf72021ad02196c16f944f00cddc12143d505b130b72b6dbbcff6f00830d0",
+      "description": "Police-recorded crime for the London regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000007/index.html",
+      "title": "London: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000008/": {
+      "contentSha256": "1e44e35b826b38759c8934bd8b96aa030946ee5ee8cdb830fc91e4cd30746f21",
+      "description": "Police-recorded crime for the South East regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000008/index.html",
+      "title": "South East: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E12000009/": {
+      "contentSha256": "aaf5d24d839e7f5aa69550e63a1573990e28cf3d463811d96a23c55e3293b339",
+      "description": "Police-recorded crime for the South West regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E12000009/index.html",
+      "title": "South West: regional unit crime statistics — CrimeLedger"
+    },
+    "/areas/E23000001/": {
+      "contentSha256": "f2ae255e447eb685e7e24720f338351430cf31b907f6a40b6ec621e6adfc6e85",
+      "description": "Police-recorded crime for the Metropolitan Police police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000001/index.html",
+      "title": "Metropolitan Police: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000002/": {
+      "contentSha256": "99c84413bcf30be0df8b28871959063b69b25bea4f0e2b4cf06200b4fc2b91f3",
+      "description": "Police-recorded crime for the Cumbria police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000002/index.html",
+      "title": "Cumbria: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000003/": {
+      "contentSha256": "ca4f0db9b155725a9d3573ec241d6bc6b67e1b9278fa4689fa425d3c0fb5299f",
+      "description": "Police-recorded crime for the Lancashire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000003/index.html",
+      "title": "Lancashire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000004/": {
+      "contentSha256": "619fdcee404773f8ed82dd9f06f942af3fe278a1304b0f9690cb381b9e9e5682",
+      "description": "Police-recorded crime for the Merseyside police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000004/index.html",
+      "title": "Merseyside: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000005/": {
+      "contentSha256": "60c311011b9578e26795a94252a9690c4c405ca8d03de2203f749bfc5aa6e6bd",
+      "description": "Police-recorded crime for the Greater Manchester police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000005/index.html",
+      "title": "Greater Manchester: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000006/": {
+      "contentSha256": "dce44eb104cab52fe92a6ddb9483f03d7c927a94008c1c120ec5a8f202d39bb3",
+      "description": "Police-recorded crime for the Cheshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000006/index.html",
+      "title": "Cheshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000007/": {
+      "contentSha256": "e6475fd38094fb50dc98c06dbf8c6428f2b02eafd90e88b22f13172a473517ff",
+      "description": "Police-recorded crime for the Northumbria police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000007/index.html",
+      "title": "Northumbria: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000008/": {
+      "contentSha256": "9d02b0ced0e256c8f98551ae68989dc890e7ec6aa87466b4a03976c2e85c1251",
+      "description": "Police-recorded crime for the Durham police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000008/index.html",
+      "title": "Durham: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000009/": {
+      "contentSha256": "ff9a7e4fd521413e577dc3d447547d769fc98ae00ad47caa2d56d7a8c1f12700",
+      "description": "Police-recorded crime for the North Yorkshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000009/index.html",
+      "title": "North Yorkshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000010/": {
+      "contentSha256": "12efb7fc62f910216b0adce73dc974c2506ab55a3ecbcfee0a2330c5d97c923b",
+      "description": "Police-recorded crime for the West Yorkshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000010/index.html",
+      "title": "West Yorkshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000011/": {
+      "contentSha256": "484280c9b85623723fbb7c28bea30fb3758831bd897f0437ea4cd981ff42d2d3",
+      "description": "Police-recorded crime for the South Yorkshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000011/index.html",
+      "title": "South Yorkshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000012/": {
+      "contentSha256": "c96bc6dcd237937c2c30ccc20ee6c728d90b10463bb8a40d9d506f185c729e60",
+      "description": "Police-recorded crime for the Humberside police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000012/index.html",
+      "title": "Humberside: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000013/": {
+      "contentSha256": "a5d8948b83a53b0966dda0b2e76407ae80d30415a4db45f62b65c5e0f3933490",
+      "description": "Police-recorded crime for the Cleveland police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000013/index.html",
+      "title": "Cleveland: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000014/": {
+      "contentSha256": "6c7cb13a174c25b679291dbc91088c29f75f30088f62f9ca1704310a62b4ba1f",
+      "description": "Police-recorded crime for the West Midlands police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000014/index.html",
+      "title": "West Midlands: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000015/": {
+      "contentSha256": "5ad0f2fcc918e23e0a9ed5618f6736fca5260919681828f32a9ebcf0148a48a5",
+      "description": "Police-recorded crime for the Staffordshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000015/index.html",
+      "title": "Staffordshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000016/": {
+      "contentSha256": "2822ef0e26803ae6b4a6a81621d2071dfec846076a8cb973f3f50bbe3bebbb70",
+      "description": "Police-recorded crime for the West Mercia police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000016/index.html",
+      "title": "West Mercia: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000017/": {
+      "contentSha256": "a630285e75a04e6ae3ad72042ca00164b944519eeb81c86ae0fa0774e801f02c",
+      "description": "Police-recorded crime for the Warwickshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000017/index.html",
+      "title": "Warwickshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000018/": {
+      "contentSha256": "20a298ea861ed8781092a2cd18bcb0c56ea8a83476ad6c3181a39d5317778596",
+      "description": "Police-recorded crime for the Derbyshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000018/index.html",
+      "title": "Derbyshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000019/": {
+      "contentSha256": "c05b1d51b6c9b538ada90182cc27873ca72f661aee61bfbf052224e4de032768",
+      "description": "Police-recorded crime for the Nottinghamshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000019/index.html",
+      "title": "Nottinghamshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000020/": {
+      "contentSha256": "a072220f253e147fc7cd949ad9d30b92ce74d066ed0b519b6fc4682ac7c58bd8",
+      "description": "Police-recorded crime for the Lincolnshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000020/index.html",
+      "title": "Lincolnshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000021/": {
+      "contentSha256": "d070c38c56e2aa7a24eabf952f4b8dbc5873ee491c93112d5d0aafbc875d3b6e",
+      "description": "Police-recorded crime for the Leicestershire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000021/index.html",
+      "title": "Leicestershire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000022/": {
+      "contentSha256": "693ab75dea8c769c9ec4b8a224c7dbcb42e09ecb998a98a9dde769453d5124ad",
+      "description": "Police-recorded crime for the Northamptonshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000022/index.html",
+      "title": "Northamptonshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000023/": {
+      "contentSha256": "50c123123709d3a38231077e9a1889b057a091e62d144b4515f1edd500fed04f",
+      "description": "Police-recorded crime for the Cambridgeshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000023/index.html",
+      "title": "Cambridgeshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000024/": {
+      "contentSha256": "235856baca4745ae958ed1153f1177e3cad82c0af8d7ab4bdc2cf0cb66f7df28",
+      "description": "Police-recorded crime for the Norfolk police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000024/index.html",
+      "title": "Norfolk: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000025/": {
+      "contentSha256": "ae4b3229fbe0a2fe0eb666228bee7b0e2c65fbf4d184fff8788e22e763a340e4",
+      "description": "Police-recorded crime for the Suffolk police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000025/index.html",
+      "title": "Suffolk: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000026/": {
+      "contentSha256": "2b5e3666a1d31e1fe961ed137a9dc95f16eaef13bf80621d7842b3e898fb45b8",
+      "description": "Police-recorded crime for the Bedfordshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000026/index.html",
+      "title": "Bedfordshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000027/": {
+      "contentSha256": "ce93caf333b4df17f6849691c40e5f09bc085e169ced82df5437f2a86817cdc2",
+      "description": "Police-recorded crime for the Hertfordshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000027/index.html",
+      "title": "Hertfordshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000028/": {
+      "contentSha256": "348f1c5788ae08d09414cdfc6fc1fee21d269976c904732e8dba58426be70998",
+      "description": "Police-recorded crime for the Essex police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000028/index.html",
+      "title": "Essex: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000029/": {
+      "contentSha256": "e06f9e4a9c6d8010490bfe03d459811b8489f5ee75367efcd3f6bad73491ba19",
+      "description": "Police-recorded crime for the Thames Valley police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000029/index.html",
+      "title": "Thames Valley: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000030/": {
+      "contentSha256": "2d6799bbbeaddaa9621aae9e4a34d2ca54327ed13499dff1b1e7337208b2a9d2",
+      "description": "Police-recorded crime for the Hampshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000030/index.html",
+      "title": "Hampshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000031/": {
+      "contentSha256": "b7e3a005d3b009d515e2e46c6ee85f35cfbfb1b0aed7663e9245a01ea86952d3",
+      "description": "Police-recorded crime for the Surrey police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000031/index.html",
+      "title": "Surrey: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000032/": {
+      "contentSha256": "e8a9a6df2d614bd98ec92dd33bb8afd2c5f22f36f0e7985e325d2b89b1754746",
+      "description": "Police-recorded crime for the Kent police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000032/index.html",
+      "title": "Kent: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000033/": {
+      "contentSha256": "f53ae95125e5150e43226317bc0dcb31591456fb6f36c3ea2bdc8c356c3e29d5",
+      "description": "Police-recorded crime for the Sussex police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000033/index.html",
+      "title": "Sussex: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000034/": {
+      "contentSha256": "a24efaa156ff3d80248ca723252412eecca9e9f0f6921f30ffa1180cbf9ab58c",
+      "description": "Police-recorded crime for the City of London police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000034/index.html",
+      "title": "City of London: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000035/": {
+      "contentSha256": "9624c60bd3603ed633fabbdffd38287dd35b0ce66a4ddb5f32409907c82c30b9",
+      "description": "Police-recorded crime for the Devon and Cornwall police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000035/index.html",
+      "title": "Devon and Cornwall: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000036/": {
+      "contentSha256": "4bb11b4ea41b146e5eb87a3d8583c39c66a2d0013078843ee2124a373860e804",
+      "description": "Police-recorded crime for the Avon and Somerset police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000036/index.html",
+      "title": "Avon and Somerset: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000037/": {
+      "contentSha256": "f1857cd7b636fdb853d640d5b682407732630d19f752e153ce6bff4622ed914b",
+      "description": "Police-recorded crime for the Gloucestershire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000037/index.html",
+      "title": "Gloucestershire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000038/": {
+      "contentSha256": "1597f047daf50c9bf0d7a8c774ede479fb400387a57b91719b032b5d3a308f79",
+      "description": "Police-recorded crime for the Wiltshire police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000038/index.html",
+      "title": "Wiltshire: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/E23000039/": {
+      "contentSha256": "401fddf8e1074668cb2d2f7e4c54de86c723814bb3ee759de73e020651830f5b",
+      "description": "Police-recorded crime for the Dorset police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/E23000039/index.html",
+      "title": "Dorset: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/W15000001/": {
+      "contentSha256": "88b2b490b59d490fbfd56a2bf380b2870f48ffcfb9efa56451d6e95cc7e99e68",
+      "description": "Police-recorded crime for the North Wales police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/W15000001/index.html",
+      "title": "North Wales: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/W15000002/": {
+      "contentSha256": "437a38e64ece8dd5ea6cbfb0fc72ab6db7ee44b98fd8997ccbe304a30cdb2530",
+      "description": "Police-recorded crime for the Gwent police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/W15000002/index.html",
+      "title": "Gwent: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/W15000003/": {
+      "contentSha256": "1ea735b5f3f3dcd041e303a4de61e611505870298ce510cb1f7e7b571ed4472a",
+      "description": "Police-recorded crime for the South Wales police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/W15000003/index.html",
+      "title": "South Wales: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/W15000004/": {
+      "contentSha256": "b45145fba10741575c48b45a6722b25063a6deabd3769c8e2b28e070835ddf98",
+      "description": "Police-recorded crime for the Dyfed-Powys police force area: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/W15000004/index.html",
+      "title": "Dyfed-Powys: police force area crime statistics — CrimeLedger"
+    },
+    "/areas/W92000004/": {
+      "contentSha256": "2a36905c83d02ee5525572bdb82158b77898055c1ea773f0cf5524054efc961b",
+      "description": "Police-recorded crime for the Wales regional unit: official counts, population rates and source notes for the year ending 30 June 2026.",
+      "kind": "area",
+      "lastmod": "2026-10-22",
+      "path": "areas/W92000004/index.html",
+      "title": "Wales: regional unit crime statistics — CrimeLedger"
+    },
+    "/crime/": {
+      "contentSha256": "28067150f965b3d369b431e06888e85837339d905ff5914e8c9bfef4df1685fe",
+      "description": "Explore official crime measures, definitions, resident-rate denominators and overlap warnings for England and Wales.",
+      "kind": "crime-directory",
+      "lastmod": "2026-10-22",
+      "path": "crime/index.html",
+      "title": "Crime types and definitions — CrimeLedger"
+    },
+    "/crime/all-crime/": {
+      "contentSha256": "d20628553f74bfbc6c129b4bb10b3e78c03ec07bce088215f7e89ab35fe1d4a5",
+      "description": "All recorded crime in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/all-crime/index.html",
+      "title": "All recorded crime statistics — CrimeLedger"
+    },
+    "/crime/bicycle-theft/": {
+      "contentSha256": "94002d56ee3e44ad3bcbc4140025798eb2ab42c300af10d5e4aad4e097af9ba3",
+      "description": "Bicycle theft in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/bicycle-theft/index.html",
+      "title": "Bicycle theft statistics — CrimeLedger"
+    },
+    "/crime/burglary/": {
+      "contentSha256": "a6f1ba5be20cecae2907d38615b43177214ba42a4f86598eb4b0489274eea3ff",
+      "description": "Burglary in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/burglary/index.html",
+      "title": "Burglary statistics — CrimeLedger"
+    },
+    "/crime/criminal-damage/": {
+      "contentSha256": "5edc210f23aff0a26273b546da2423c044bddb4cfefefebcf2e00977f7ccc9ff",
+      "description": "Criminal damage & arson in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/criminal-damage/index.html",
+      "title": "Criminal damage & arson statistics — CrimeLedger"
+    },
+    "/crime/drug-offences/": {
+      "contentSha256": "87c3637cc58594b23ee19f24c5f2a8135eaa21cf622a457b60c566408ecbab60",
+      "description": "Drug offences in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/drug-offences/index.html",
+      "title": "Drug offences statistics — CrimeLedger"
+    },
+    "/crime/firearms/": {
+      "contentSha256": "8e1946f806a84f3a684fb845a37201b13fcb3e5557f5e8c3c2d3739bf59bb7e3",
+      "description": "Firearm offences in England and Wales: definition, official area counts and rates per 100,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/firearms/index.html",
+      "title": "Firearm offences statistics — CrimeLedger"
+    },
+    "/crime/homicide/": {
+      "contentSha256": "bee56b3c8fa795c8a50d3ed816181e1fabfda840d72dfc1ed05139f57f55d93d",
+      "description": "Homicide in England and Wales: definition, official area counts and rates per 100,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/homicide/index.html",
+      "title": "Homicide statistics — CrimeLedger"
+    },
+    "/crime/knife-enabled/": {
+      "contentSha256": "59a708ddee75b4b5c4f26835e74338909a518251d113f54f5fab25963b12d30b",
+      "description": "Knife-enabled crime in England and Wales: definition, official area counts and rates per 100,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/knife-enabled/index.html",
+      "title": "Knife-enabled crime statistics — CrimeLedger"
+    },
+    "/crime/miscellaneous/": {
+      "contentSha256": "f59d910702ce3002588be1a0f18eff4f79c67121ec6ea1b77d653efe57096149",
+      "description": "Miscellaneous crimes against society in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/miscellaneous/index.html",
+      "title": "Miscellaneous crimes against society statistics — CrimeLedger"
+    },
+    "/crime/non-residential-burglary/": {
+      "contentSha256": "b760e819c4a15681b0eb66bc8d50561af5c4a742616decd8565d2586034e4738",
+      "description": "Non-residential burglary in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/non-residential-burglary/index.html",
+      "title": "Non-residential burglary statistics — CrimeLedger"
+    },
+    "/crime/other-theft/": {
+      "contentSha256": "2dc7a499d151c89924e7562bfe80e181e78437fd0c37c78020f50e5a127635da",
+      "description": "Other theft offences in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/other-theft/index.html",
+      "title": "Other theft offences statistics — CrimeLedger"
+    },
+    "/crime/public-order/": {
+      "contentSha256": "182599361ee4816fcb3c70202b74351bb86229aaea48e73bd360a153dded2396",
+      "description": "Public order in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/public-order/index.html",
+      "title": "Public order statistics — CrimeLedger"
+    },
+    "/crime/residential-burglary/": {
+      "contentSha256": "126bd5ad37ab3a05485154b5cbd94a859e232f3343fbe00d91d851e61179499a",
+      "description": "Residential burglary in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/residential-burglary/index.html",
+      "title": "Residential burglary statistics — CrimeLedger"
+    },
+    "/crime/robbery/": {
+      "contentSha256": "65b669e33a1586cc4c61e128a4abcb68a7d7accddf15b6bc94b5e60b0d5f53c1",
+      "description": "Robbery in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/robbery/index.html",
+      "title": "Robbery statistics — CrimeLedger"
+    },
+    "/crime/sexual-offences/": {
+      "contentSha256": "4bcb891b24628e8e71bdfb63a1c0cd7d94b8d58401789d968fcf93238a702c84",
+      "description": "Sexual offences in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/sexual-offences/index.html",
+      "title": "Sexual offences statistics — CrimeLedger"
+    },
+    "/crime/shoplifting/": {
+      "contentSha256": "411712400c05a8bee9a527ad868e82ceafc13a8510ed8b45d38c05425195361a",
+      "description": "Shoplifting in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/shoplifting/index.html",
+      "title": "Shoplifting statistics — CrimeLedger"
+    },
+    "/crime/stalking-harassment/": {
+      "contentSha256": "e6e191cd49f43e8402bb5caf74f552e18b9b3881ea2e7c1baa0dba2bce22a9c2",
+      "description": "Stalking and harassment in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/stalking-harassment/index.html",
+      "title": "Stalking and harassment statistics — CrimeLedger"
+    },
+    "/crime/theft-from-person/": {
+      "contentSha256": "7b8f665dfdadee60730da99b0d05f46c3f9071242712f4e968b30f8dbfd3aa91",
+      "description": "Theft from the person in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/theft-from-person/index.html",
+      "title": "Theft from the person statistics — CrimeLedger"
+    },
+    "/crime/theft/": {
+      "contentSha256": "10ab19d712f96f2a60a551b0e3e2619e9e18ada8a7164d017be5038c1a648722",
+      "description": "All theft offences in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/theft/index.html",
+      "title": "All theft offences statistics — CrimeLedger"
+    },
+    "/crime/unlawful-driving/": {
+      "contentSha256": "0174b1b43586886a148365d69d4304f42b4c7710ac052a9570c61582a865f820",
+      "description": "Death or serious injury — unlawful driving in England and Wales: definition, official area counts and rates per 100,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/unlawful-driving/index.html",
+      "title": "Death or serious injury — unlawful driving statistics — CrimeLedger"
+    },
+    "/crime/vehicle-crime/": {
+      "contentSha256": "e33e23932c9c6f24e5e73ec24ca7513fcb07b00decf22a2af17e60a96f227032",
+      "description": "Vehicle crime in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/vehicle-crime/index.html",
+      "title": "Vehicle crime statistics — CrimeLedger"
+    },
+    "/crime/violence-with-injury/": {
+      "contentSha256": "eefcce94d0470936ac105719ffed5b9fe6bca8653e4df2f0f68cccdda9c8be13",
+      "description": "Violence with injury in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/violence-with-injury/index.html",
+      "title": "Violence with injury statistics — CrimeLedger"
+    },
+    "/crime/violence-without-injury/": {
+      "contentSha256": "5dcd5ef83e91e987aad0b7ec71b39fac140bc47ef62a23c84c5faa2c3b46eb84",
+      "description": "Violence without injury in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/violence-without-injury/index.html",
+      "title": "Violence without injury statistics — CrimeLedger"
+    },
+    "/crime/violence/": {
+      "contentSha256": "0ca4033ad29eb60dbd26147db8d204d623f355385fd7ac76e27bee4137055ddc",
+      "description": "Violence in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/violence/index.html",
+      "title": "Violence statistics — CrimeLedger"
+    },
+    "/crime/weapons/": {
+      "contentSha256": "b0d70271f48c2b7d09c453a5314490be65e43a40eb0ef5ca08866b6bc78ab64d",
+      "description": "Weapons possession in England and Wales: definition, official area counts and rates per 1,000 residents, with dated sources and limitations.",
+      "kind": "crime",
+      "lastmod": "2026-10-22",
+      "path": "crime/weapons/index.html",
+      "title": "Weapons possession statistics — CrimeLedger"
+    },
+    "/methodology/": {
+      "contentSha256": "ea15086529af54f2605db93e850e6e0808e8485a4ce83152f007836f19009faf",
+      "description": "Understand police-recorded crime, population-adjusted rates, suppressed values, quarterly and monthly coverage, and limits on regional comparisons.",
+      "kind": "methodology",
+      "lastmod": "2026-10-22",
+      "path": "methodology/index.html",
+      "title": "Crime comparison methodology — CrimeLedger"
+    },
+    "/privacy/": {
+      "contentSha256": "60bd7ac47a21a928cab64ba417ced0c0033bfe338101a76d626eca3224a25406",
+      "description": "How crime.compare handles optional analytics, cookies and audience reporting, and how to change your choices.",
+      "kind": "privacy",
+      "lastmod": "2026-10-22",
+      "path": "privacy/index.html",
+      "title": "Privacy and analytics choices — CrimeLedger"
+    },
+    "/sources/": {
+      "contentSha256": "335f4c650ec6835387d794ff4148df7297e3d00335775d645ed16fe1df5842e9",
+      "description": "Read the ONS, Home Office and Police.uk sources behind CrimeLedger, with public JSON, source manifests, geography attribution and licensing.",
+      "kind": "sources",
+      "lastmod": "2026-10-22",
+      "path": "sources/index.html",
+      "title": "Crime statistics sources and downloads — CrimeLedger"
+    }
+  },
+  "schemaVersion": "crime-compare-discovery-1.0.0",
+  "sitemapSha256": "f65bc7bd68a2f2a3581d4f6fc837068b7116470314c02af41c60ee9abfaef1bd"
+}

@@ -537,7 +537,7 @@ def build_api_report(bundle: dict[str, object], *, now: datetime | None = None) 
         "limitations": [
             "GA4 user counts describe measured browser/device identities under Google's reporting identity and estimation; they are not a certified count of individual humans.",
             "Google excludes known bots and spiders. Unknown bots, internal visits and test activity may remain; confirm internal-traffic exclusions before sharing.",
-            "Only consenting browsers are measured. Declined consent, blockers and implementation gaps can reduce coverage; no uplift for unmeasured readers is applied.",
+            "Only consenting browsers are measured. Standalone area, crime-category, methodology and sources pages do not load analytics, so reports do not cover all public pages. Declined consent, blockers and implementation gaps also reduce coverage; no uplift for unmeasured readers is applied.",
             "Total users are queried once for the entire period. Daily averages, countries and pages must not be added together to estimate period reach.",
             "New and returning user groups can overlap when a first-time visitor returns within the period; they are not complementary percentages.",
             "Section shares describe page views of broad official/monthly comparison and reference sections. Visitor countries are shown separately and do not identify which crime areas a visitor studied, their residence or personal circumstances.",

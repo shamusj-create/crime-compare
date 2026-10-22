@@ -2,7 +2,7 @@
 
 A static crime comparison website using official public data. The first edition compares police force areas in England and Wales, with recorded counts, population rates, offence categories and historical trends. It labels the period covered separately from the date the sources were checked.
 
-The site is designed for free static hosting on Cloudflare Pages. A public GitHub repository runs a monthly source check through GitHub Actions. The hosted app reads validated static JSON from that repository, with packaged data as a fallback. Monthly data updates need no Cloudflare token or redeployment. There is no paid data API, database or server.
+The site is designed for free static hosting on Cloudflare Pages. A public GitHub repository runs a monthly source check through GitHub Actions. The hosted app reads validated static JSON from that repository, with packaged data as a fallback. The monthly job also rebuilds and publishes crawlable discovery pages using a dedicated Cloudflare Pages deployment secret. There is no paid data API, database or server.
 
 Police force areas are the default comparison; an explicit region selection is preserved in the URL. Clicking a row opens its profile, with annual counts and changes, rate rank, regional/national references, exact rolling-year history, a full crime-type breakdown, coverage and source notes, and a CSV of every available observation. Crime choices inside a profile are shareable in the URL.
 
@@ -34,12 +34,13 @@ source .venv/bin/activate
 python -m pip install -r scripts/requirements.txt
 python scripts/refresh_data.py
 python scripts/refresh_monthly.py
+npm run refresh:discovery
 npm run build
 ```
 
 The official-statistics refresh writes `public/data/crime.json` and `public/data/source-manifest.json`; the monthly reader writes `public/data/monthly.json` and `public/data/monthly-manifest.json`. The workflow publishes the complete set only after both refreshes, data validation, tests and the build pass. Source URLs, publication dates and hashes are retained with the data. An unchanged source snapshot produces no rewritten statistics.
 
-The workflow in [`.github/workflows/refresh-data.yml`](.github/workflows/refresh-data.yml) runs at 12:17 UTC on the 5th of each month and can also be started manually. It records successful check status in a separate `refresh-status.json`, runs the app checks and commits only changed public data files. Cloudflare credentials are optional and used only when a manual run explicitly requests app-code publication.
+The workflow in [`.github/workflows/refresh-data.yml`](.github/workflows/refresh-data.yml) runs at 12:17 UTC on the 5th of each month and can also be started manually. It records successful check status in a separate `refresh-status.json`, regenerates the discovery manifest, runs the app checks and commits only validated public data and discovery metadata. Scheduled runs then upload and verify the static site on the existing Cloudflare Pages project. Manual runs default to publication; a data-only recovery option remains available.
 
 **The two data layers have different meanings.** The official quarterly England and Wales series supports the main comparisons. The monthly police.uk layer provides more recent provisional management data and its own coverage notes. New observations appear when their publisher releases them; source revisions can change earlier values. Scottish and Northern Irish sources have different publication schedules and definitions, so they should be added with their own clearly labelled coverage rather than silently merged into a UK league table.
 
@@ -49,7 +50,7 @@ The application is live at [crime.compare](https://crime.compare/) and [www.crim
 
 The canonical hostname is `https://crime.compare/`. Both apex and `www` serve the verified app over HTTPS with the apex canonical URL. **Cloudflare Registrar registration succeeded on 22 October 2026 for US$25.20 for one year, expiring 22 October 2027.** Auto-renew is enabled, currently quoted at US$25.20/year. Domain registration is a separate annual expense from free static hosting. See the [domain record](deploy/domain-research.md).
 
-The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployment and monthly public-data updates. The default update route uses only GitHub's built-in repository token and needs no Cloudflare secret. The guide also covers optional automated code deployments.
+The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployment and monthly public-data updates. The update route uses GitHub’s built-in repository token for validated snapshot commits and a dedicated encrypted Pages token for monthly static uploads. It adds no database, runtime server or paid service. The [discoverability guide](docs/discoverability.md) describes the crawlable pages, metadata, sitemap and verification.
 
 ## Optional audience measurement
 

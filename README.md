@@ -45,9 +45,11 @@ The workflow in [`.github/workflows/refresh-data.yml`](.github/workflows/refresh
 
 ## Free hosting and domain
 
-Follow [the Cloudflare setup guide](deploy/cloudflare-pages.md) to create a dedicated Pages project and enable monthly public-data updates. The default update route uses only GitHub's built-in repository token and needs no Cloudflare secret. The guide also describes optional automated code deployments.
+The application is deployed at [crime-compare.pages.dev](https://crime-compare.pages.dev/) from the public [crime-compare repository](https://github.com/shamusj-create/crime-compare). The verified release is commit `9d15808`, Cloudflare deployment `5a7f9324`; [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed. See the [verification record](docs/VERIFICATION.md).
 
-The site can use the included free `*.pages.dev` address. A custom domain is a separate annual purchase. On 22 October 2026, a live registrar check showed **crime.compare available for US$26.26 for one year, renewing at US$26.26/year**, before any applicable checkout tax or currency conversion. Availability and prices can change. No domain has been bought. See the [domain research record](deploy/domain-research.md).
+The canonical hostname is configured as `https://crime.compare/`. **Cloudflare Registrar registration succeeded on 22 October 2026 for US$25.20 for one year, expiring 22 October 2027.** Auto-renew is enabled, currently quoted at US$25.20/year. Pages association and HTTPS activation are still being verified; the custom hostname is not yet recorded as live. Domain registration is a separate annual expense from free static hosting. See the [domain record](deploy/domain-research.md).
+
+The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployment and monthly public-data updates. The default update route uses only GitHub's built-in repository token and needs no Cloudflare secret. The guide also covers optional automated code deployments.
 
 ## Data and interpretation
 

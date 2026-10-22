@@ -1,27 +1,18 @@
-# Domain check — 22 October 2026
+# crime.compare — Cloudflare registration record
 
-**Preferred name: `crime.compare`.** It directly describes the site and matches the existing `politicians.compare` naming pattern.
+Checked 22 October 2026. `crime.compare` follows the existing `politicians.compare` naming pattern and describes the site's comparison function.
 
-A live [Porkbun registrar search for crime.compare](https://porkbun.com/checkout/search?q=crime.compare), checked on 22 October 2026, displayed an available **Add to cart** result with:
+Cloudflare Registrar supports `.compare`, as shown by its [TLD policies](https://www.cloudflare.com/tld-policies/) and [official extension price list](https://pricing.registrar.cloudflare.com/). The account checkout quoted:
 
-| Item | Quoted price |
+| Item | Cloudflare quote |
 |---|---|
-| One-year registration | **US$26.26** |
-| Annual renewal | **US$26.26/year** |
+| One-year registration | **US$25.20** |
+| Annual renewal | **US$25.20/year** |
 
-The result was labelled “At Cost”, with no premium-name surcharge shown. These are the displayed USD prices, before any applicable checkout tax or currency conversion. Recheck both registration and renewal in the registrar's final quote. No cart, registration, purchase, DNS or account change was made.
+The user explicitly approved purchasing `crime.compare` at this price and accepting the displayed registration terms. **Cloudflare confirmed successful registration on 22 October 2026:** its success page displayed “Your domain is ready” and links to the receipt and domain management. The one-year purchase was US$25.20. Domain management confirms **Active** status and expiry on **22 October 2027**. Auto-renew is enabled, currently quoted at US$25.20/year, with the next one-year renewal scheduled for **22 September 2027**. The registry RDAP record also confirms registration through Cloudflare. Account identifiers, order identifiers, registrant contacts and receipt details are not stored here.
 
-The registry's [RDAP endpoint for crime.compare](https://rdap.nic.compare/domain/crime.compare) returned HTTP 404 (no registration record). The `.compare` endpoint was discovered from [IANA's RDAP bootstrap](https://data.iana.org/rdap/dns.json). RDAP alone does not prove a name is registrable: names can be reserved or premium, so the live registrar result is the stronger availability/price check.
+The canonical and Open Graph hostname in the app, robots file and sitemap is prepared as `https://crime.compare/`. The current verified deployment remains [crime-compare.pages.dev](https://crime-compare.pages.dev/), release commit `9d15808`, Cloudflare deployment `5a7f9324`. [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed.
 
-Other plausible names returned no registration record from the same registry lookup:
+Pages association and HTTPS activation are still being verified; registration success alone does not establish that the site is live at the hostname. Associate `crime.compare` through **Workers & Pages → crime-compare → Custom domains → Set up a domain** in the same Cloudflare account. Cloudflare Registrar supplies Cloudflare nameservers. Confirm the apex zone, Pages domain status and HTTPS certificate, then test the live app and source-data behaviour on the hostname. Follow the [official Pages custom-domain guide](https://developers.cloudflare.com/pages/configuration/custom-domains/).
 
-| Candidate | Check result |
-|---|---|
-| `ukcrime.compare` | No RDAP record; registrar availability/price not separately checked |
-| `crimes.compare` | No RDAP record; registrar availability/price not separately checked |
-| `safer.compare` | No RDAP record; registrar availability/price not separately checked |
-| `crimeuk.compare` | No RDAP record; registrar availability/price not separately checked |
-
-These are alternatives if the preferred name changes availability. `safer.compare` is less literal and may imply an overall safety judgement beyond police recorded crime, so `crime.compare` is the clearer product name.
-
-Cloudflare Pages hosting can remain free. Domain registration and renewal are a separate recurring purchase; the free `*.pages.dev` hostname works without one. No domain has been reserved for this project.
+Cloudflare Pages static hosting and standard GitHub Actions runners for the public data repository remain on their free routes. Domain registration and renewal are the separate annual purchase. This setup adds no paid runtime service, analytics or redirect service.

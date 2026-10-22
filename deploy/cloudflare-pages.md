@@ -4,6 +4,12 @@ Cloudflare Pages serves the static application. A dedicated public GitHub reposi
 
 The scheduled GitHub workflow updates the repository's data. **Monthly data publication needs no Cloudflare secret, GitHub app installation or code redeployment.** App-code releases are a separate operation.
 
+## Current release
+
+The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime-compare.pages.dev](https://crime-compare.pages.dev/). Release commit `9d15808` was verified in deployment `5a7f9324`; [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed.
+
+The canonical hostname is prepared as `https://crime.compare/`. Cloudflare Registrar confirmed registration on 22 October 2026 after the user approved the purchase and terms. The one-year purchase was US$25.20; auto-renew is enabled and currently quoted at US$25.20/year. Pages association and HTTPS activation are still being verified. The following setup instructions also serve as a rebuild/recovery runbook.
+
 ## Costs and limits
 
 | Component | Default setup |
@@ -108,10 +114,10 @@ An explicitly requested code publication fails before committing if any deployme
 
 Rotate this optional token independently of any other site's credentials. The `politicians.compare` repository and deployment must not be modified by this setup.
 
-## Optional: attach a custom domain
+## Attach crime.compare to Pages
 
-The free `*.pages.dev` address works without buying a domain. [Domain research](domain-research.md) found `crime.compare` available on 22 October 2026 at US$26.26 registration and US$26.26/year renewal, before applicable tax/FX. Nothing was purchased.
+The free `*.pages.dev` address remains available. The [Cloudflare domain record](domain-research.md) records the successful US$25.20 one-year registration and current US$25.20/year auto-renew quote. Registration is confirmed; Pages association and HTTPS activation are still being verified.
 
-After separately registering a chosen name, open the Pages project's **Custom domains → Set up a custom domain** and enter it there first. For an apex such as `crime.compare`, the domain must be a zone in the same Cloudflare account with Cloudflare authoritative nameservers. A subdomain on external DNS can instead use a CNAME to the Pages project. See [Cloudflare's custom-domain guide](https://developers.cloudflare.com/pages/configuration/custom-domains/).
+After registration succeeds, open **Workers & Pages → crime-compare → Custom domains → Set up a custom domain** and enter `crime.compare` there first. The apex zone must be in the same Cloudflare account as Pages. Cloudflare Registrar uses Cloudflare authoritative nameservers, so follow the Pages dashboard's DNS confirmation. See [Cloudflare's custom-domain guide](https://developers.cloudflare.com/pages/configuration/custom-domains/).
 
-Wait for TLS to become active, then verify HTTPS, the interface and data status on the final hostname. Update the app's canonical/social-share origin when that hostname is known.
+Wait for TLS to become active, then verify HTTPS, the interface, remote-data hashes/fallback and source-check status at `https://crime.compare/`. The canonical link, Open Graph URL, `robots.txt` and `sitemap.xml` are prepared for this hostname. Deploy the metadata update as part of the normal app-code release after checking the final registration state.

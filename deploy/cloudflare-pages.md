@@ -6,7 +6,7 @@ The scheduled GitHub workflow updates the repository’s data and rebuilds the c
 
 ## Current release
 
-The discovery release is `e425f87`, deployment `5bd347ba`, with [passing CI](https://github.com/shamusj-create/crime-compare/actions/runs/39827868778) and live checks of all 84 pages on the deployment and production origins. Automatic static uploads are implemented but await approval to create and store the dedicated Pages edit token. The original monthly data route remains active until the project variable is configured. See the [discovery release guide](../docs/discoverability.md).
+The discovery release is `e425f87`, deployment `5bd347ba`, with [passing CI](https://github.com/shamusj-create/crime-compare/actions/runs/39827868778) and live checks of all 84 pages on the deployment and production origins. The owner approved the dedicated Pages edit token on 22 October 2026. Both encrypted GitHub deployment secrets and the `crime-compare` Pages project variable are configured, enabling scheduled static uploads. [Full publication run 39833556614](https://github.com/shamusj-create/crime-compare/actions/runs/39833556614) passed and published snapshot `914bb6b` to deployment `df0f97e8`, including exact JSON checks and all 84 production discovery pages. See the [discovery release guide](../docs/discoverability.md).
 
 The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime.compare](https://crime.compare/), [www.crime.compare](https://www.crime.compare/) and [crime-compare.pages.dev](https://crime-compare.pages.dev/). Metadata release `17f803a` is verified in deployment `ca0865e4` and passed [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722).
 
@@ -98,6 +98,10 @@ The schedule runs at **12:17 UTC on the 5th of every month**. A successful check
 GitHub schedules are best effort: runs can be delayed or dropped, and public scheduled workflows can be disabled after 60 days without repository activity. Successful monthly status commits provide regular activity. Keep GitHub failure notifications enabled and verify the first scheduled run. After a failed/missed run, run it manually; if scheduling is disabled, re-enable the workflow in Actions. See [GitHub schedule behaviour](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 
 No second push-triggered workflow is required. GitHub's [restriction on workflows triggered by `GITHUB_TOKEN` pushes](https://docs.github.com/en/actions/concepts/security/github_token) therefore does not interrupt this update route.
+
+## Keep automatic analytics injection disabled
+
+For the crime.compare domain, **Speed → Real User Measurements (RUM) → Disable completely** is saved and was confirmed after reload on 22 October 2026. This is separate from Pages project Web Analytics and the account’s Web Analytics site list. Cloudflare’s default free-zone RUM can inject its own beacon outside UK/EEA responses even when Pages analytics fields are empty. Keep it disabled so the published script set matches the approved build and measurement remains within the consent-based GA4 contract. See [Cloudflare’s RUM documentation](https://developers.cloudflare.com/speed/observatory/rum-beacon/). The live verifier must continue to reject unexpected scripts rather than accept that beacon. Existing CSP also excludes its script origin.
 
 ## Automatic static publication credentials
 

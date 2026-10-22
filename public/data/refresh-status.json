@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedAt": "2026-10-22T18:29:38+00:00",
+  "checkedAt": "2026-10-22T18:36:34+00:00",
   "result": "unchanged",
   "datasetSha256": "6213a6746e4798df622e72ef310ade5d03aee702b5c642c75e4b9bffb19ad303",
   "note": "Successful retrieval and validation of official sources. Crime periods and source publication dates are recorded in the datasets and source manifests.",

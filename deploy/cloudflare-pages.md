@@ -82,7 +82,7 @@ The job:
 
 A download, parsing, validation, test, build or push failure stops publication. The preceding complete remote snapshot and the existing Cloudflare app remain available. After a successful run, verify that the public raw JSON files contain the new status/hash set and that the live app loads the same values. A complete refresh is published by one Git commit.
 
-The schedule runs at **06:17 UTC on the 28th of every month**. A successful check can find unchanged sources; it does not invent a new month of observations. The status file supplies a real monthly check record even between quarterly releases.
+The schedule runs at **12:17 UTC on the 5th of every month**. A successful check can find unchanged sources; it does not invent a new month of observations. The status file supplies a real monthly check record even between quarterly releases.
 
 GitHub schedules are best effort: runs can be delayed or dropped, and public scheduled workflows can be disabled after 60 days without repository activity. Successful monthly status commits provide regular activity. Keep GitHub failure notifications enabled and verify the first scheduled run. After a failed/missed run, run it manually; if scheduling is disabled, re-enable the workflow in Actions. See [GitHub schedule behaviour](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
 

@@ -2,8 +2,8 @@ name: Refresh public crime data
 
 on:
   schedule:
-    # Off the top of the hour, after the usual quarterly publication window.
-    - cron: "17 6 28 * *"
+    # After the previous month’s usual publication window, away from the top of the hour.
+    - cron: "17 12 5 * *"
   workflow_dispatch:
     inputs:
       publish:

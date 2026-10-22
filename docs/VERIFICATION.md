@@ -1,11 +1,11 @@
 # Release verification — 22 October 2026
 
-Live app: https://crime-compare.pages.dev/
+Live app: https://crime.compare/
 Source: https://github.com/shamusj-create/crime-compare
 
-Verified release: commit `9d15808`, Cloudflare deployment `5a7f9324`; [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed.
+Verified metadata release: commit `17f803aeb95b6c34fe657532ca784d1456ef9bc7`, Cloudflare deployment `ca0865e4`; [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722) passed. The preceding rich-profile release `9d15808`, deployment `5a7f9324`, passed [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022).
 
-Cloudflare Registrar confirmed successful registration of `crime.compare` on 22 October 2026 for US$25.20 for one year. Domain management shows Active status and expiry on 22 October 2027; auto-renew is on, currently quoted at US$25.20/year and scheduled for 22 September 2027. The canonical URL, Open Graph URL, robots file and sitemap are prepared for `https://crime.compare/`. Pages association and final HTTPS verification are still in progress; registration success is not recorded as proof of a live custom hostname.
+Cloudflare Registrar confirmed registration of `crime.compare` on 22 October 2026 for US$25.20 for one year. Domain management shows Active status and expiry on 22 October 2027; auto-renew is on, currently quoted at US$25.20/year and scheduled for 22 September 2027. Pages reports the apex Active with SSL enabled. Independent HTTPS checks matched HTML, assets, datasets, status hashes, robots and sitemap to the deployed build. Browser verification at the apex confirmed 25 official categories, the default force view, remote data without fallback and the correct canonical URL. `www.crime.compare` independently returned HTTPS 200 over trusted TLS 1.3, with byte-identical built HTML and the apex canonical URL. Both HTTP hosts return 301 to their corresponding HTTPS host, preserving query strings.
 
 ## Verified behaviour
 
@@ -30,6 +30,7 @@ Cloudflare Registrar confirmed successful registration of `crime.compare` on 22 
 - Full live refresh succeeded: https://github.com/shamusj-create/crime-compare/actions/runs/39788999483
 - The live refresh used the built-in repository token only, published one validated data commit and skipped optional Cloudflare code upload.
 - The rich-profile release passed CI: https://github.com/shamusj-create/crime-compare/actions/runs/39799183022
+- The deployed metadata release passed CI: https://github.com/shamusj-create/crime-compare/actions/runs/39803909722
 
 ## Operational limits
 
@@ -41,4 +42,4 @@ Local browser checks confirmed that a fresh visit opens police force areas, whil
 
 The monthly Dorset profile reconciles its annual total (41,899 versus 44,548, down 5.95%) and August counts (4,068 versus 3,563, up 14.17%). The grouped monthly bars, exact-figures disclosure, category navigation and full-area CSV download were exercised. Greater Manchester shows unavailable annual/monthly values and incomplete-coverage notes, with no invented zeros or trend. Desktop and 390px mobile layouts were checked, including horizontal scrolling inside data tables.
 
-The production build, 16 Node tests, 29 Python tests and both published-snapshot validators passed. Both snapshot hashes match refresh-status; all monthly metric values remain unchanged after rebuilding their provenance against the expanded official snapshot. This update was published from commit `9d15808` in Cloudflare deployment `5a7f9324` and passed CI run `39799183022`. The custom-domain metadata update is prepared locally while Pages association and final HTTPS checks are completed.
+The production build, 16 Node tests, 29 Python tests and both published-snapshot validators passed. Both snapshot hashes match refresh-status; all monthly metric values remain unchanged after rebuilding their provenance against the expanded official snapshot. The rich-profile update was published from commit `9d15808` in deployment `5a7f9324` and passed CI run `39799183022`. Custom-domain metadata was subsequently deployed in commit `17f803a`, deployment `ca0865e4`, and verified over HTTPS at `crime.compare`.

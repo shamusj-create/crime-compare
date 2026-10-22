@@ -45,9 +45,9 @@ The workflow in [`.github/workflows/refresh-data.yml`](.github/workflows/refresh
 
 ## Free hosting and domain
 
-The application is deployed at [crime-compare.pages.dev](https://crime-compare.pages.dev/) from the public [crime-compare repository](https://github.com/shamusj-create/crime-compare). The verified release is commit `9d15808`, Cloudflare deployment `5a7f9324`; [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed. See the [verification record](docs/VERIFICATION.md).
+The application is live at [crime.compare](https://crime.compare/) and [www.crime.compare](https://www.crime.compare/) from the public [crime-compare repository](https://github.com/shamusj-create/crime-compare). The verified metadata release is commit `17f803a`, Cloudflare deployment `ca0865e4`; [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722) passed. HTTPS, HTML, assets, dataset hashes, robots and sitemap were checked against the build. See the [verification record](docs/VERIFICATION.md).
 
-The canonical hostname is configured as `https://crime.compare/`. **Cloudflare Registrar registration succeeded on 22 October 2026 for US$25.20 for one year, expiring 22 October 2027.** Auto-renew is enabled, currently quoted at US$25.20/year. Pages association and HTTPS activation are still being verified; the custom hostname is not yet recorded as live. Domain registration is a separate annual expense from free static hosting. See the [domain record](deploy/domain-research.md).
+The canonical hostname is `https://crime.compare/`. Both apex and `www` serve the verified app over HTTPS with the apex canonical URL. **Cloudflare Registrar registration succeeded on 22 October 2026 for US$25.20 for one year, expiring 22 October 2027.** Auto-renew is enabled, currently quoted at US$25.20/year. Domain registration is a separate annual expense from free static hosting. See the [domain record](deploy/domain-research.md).
 
 The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployment and monthly public-data updates. The default update route uses only GitHub's built-in repository token and needs no Cloudflare secret. The guide also covers optional automated code deployments.
 

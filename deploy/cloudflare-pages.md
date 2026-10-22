@@ -6,9 +6,9 @@ The scheduled GitHub workflow updates the repository's data. **Monthly data publ
 
 ## Current release
 
-The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime-compare.pages.dev](https://crime-compare.pages.dev/). Release commit `9d15808` was verified in deployment `5a7f9324`; [CI run 39799183022](https://github.com/shamusj-create/crime-compare/actions/runs/39799183022) passed.
+The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime.compare](https://crime.compare/), [www.crime.compare](https://www.crime.compare/) and [crime-compare.pages.dev](https://crime-compare.pages.dev/). Metadata release `17f803a` is verified in deployment `ca0865e4` and passed [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722).
 
-The canonical hostname is prepared as `https://crime.compare/`. Cloudflare Registrar confirmed registration on 22 October 2026 after the user approved the purchase and terms. The one-year purchase was US$25.20; auto-renew is enabled and currently quoted at US$25.20/year. Pages association and HTTPS activation are still being verified. The following setup instructions also serve as a rebuild/recovery runbook.
+The canonical hostname `https://crime.compare/` is Active with SSL enabled. HTTPS checks matched HTML, assets, dataset/status hashes, robots and sitemap to the deployed build. `www.crime.compare` also returns HTTPS 200 with matching HTML and the apex canonical URL. Both HTTP hosts redirect to their corresponding HTTPS host, preserving queries. Cloudflare Registrar confirmed the US$25.20 one-year purchase on 22 October 2026; expiry is 22 October 2027, with auto-renew enabled and currently quoted at US$25.20/year. The following instructions serve as a rebuild/recovery runbook.
 
 ## Costs and limits
 
@@ -116,8 +116,8 @@ Rotate this optional token independently of any other site's credentials. The `p
 
 ## Attach crime.compare to Pages
 
-The free `*.pages.dev` address remains available. The [Cloudflare domain record](domain-research.md) records the successful US$25.20 one-year registration and current US$25.20/year auto-renew quote. Registration is confirmed; Pages association and HTTPS activation are still being verified.
+The free `*.pages.dev` address remains available. The [Cloudflare domain record](domain-research.md) records the successful US$25.20 one-year registration and current US$25.20/year auto-renew quote. Apex and `www` Pages associations and HTTPS are verified, with the apex as the canonical URL.
 
 After registration succeeds, open **Workers & Pages → crime-compare → Custom domains → Set up a custom domain** and enter `crime.compare` there first. The apex zone must be in the same Cloudflare account as Pages. Cloudflare Registrar uses Cloudflare authoritative nameservers, so follow the Pages dashboard's DNS confirmation. See [Cloudflare's custom-domain guide](https://developers.cloudflare.com/pages/configuration/custom-domains/).
 
-Wait for TLS to become active, then verify HTTPS, the interface, remote-data hashes/fallback and source-check status at `https://crime.compare/`. The canonical link, Open Graph URL, `robots.txt` and `sitemap.xml` are prepared for this hostname. Deploy the metadata update as part of the normal app-code release after checking the final registration state.
+For future hostname changes, verify HTTPS, the interface, remote-data hashes/fallback and source-check status after TLS becomes active. The canonical link, Open Graph URL, `robots.txt` and `sitemap.xml` are deployed for `https://crime.compare/` in release `17f803a`.

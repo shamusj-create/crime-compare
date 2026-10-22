@@ -29,3 +29,11 @@ Source: https://github.com/shamusj-create/crime-compare
 ## Operational limits
 
 Monthly checks run at 12:17 UTC on the fifth of each month. GitHub schedules are best effort; check failure notifications. Quarterly official releases and monthly provisional observations remain separate. GitHub public raw-file CDN propagation can delay visibility briefly. Cloudflare static serving and standard public-repository Actions use free tiers; a custom domain is an independent annual expense. No domain was purchased. Testing covered one browser engine and simulated sizes, not all physical devices or field performance.
+
+## Rich force-profile update, 22 October 2026
+
+Local browser checks confirmed that a fresh visit opens police force areas, while an explicit region selection survives reload. The official selector now contains 25 measures in three groups. Homicide displays per 100,000 and retains source-suppressed changes. Knife/firearm histories retain real dates; the firearm national reference correctly excludes BTP. Selecting a crime type in a profile updates the shareable URL and survives reload.
+
+The monthly Dorset profile reconciles its annual total (41,899 versus 44,548, down 5.95%) and August counts (4,068 versus 3,563, up 14.17%). The grouped monthly bars, exact-figures disclosure, category navigation and full-area CSV download were exercised. Greater Manchester shows unavailable annual/monthly values and incomplete-coverage notes, with no invented zeros or trend. Desktop and 390px mobile layouts were checked, including horizontal scrolling inside data tables.
+
+The production build, 16 Node tests, 29 Python tests and both published-snapshot validators passed. Both snapshot hashes match refresh-status; all monthly metric values remain unchanged after rebuilding their provenance against the expanded official snapshot. This update is local; publication requires the pending GitHub/Cloudflare approval.

@@ -4,6 +4,10 @@ A static crime comparison website using official public data. The first edition 
 
 The site is designed for free static hosting on Cloudflare Pages. A public GitHub repository runs a monthly source check through GitHub Actions. The hosted app reads validated static JSON from that repository, with packaged data as a fallback. Monthly data updates need no Cloudflare token or redeployment. There is no paid data API, database or server.
 
+Police force areas are the default comparison; an explicit region selection is preserved in the URL. Clicking a row opens its profile, with annual counts and changes, rate rank, regional/national references, exact rolling-year history, a full crime-type breakdown, coverage and source notes, and a CSV of every available observation. Crime choices inside a profile are shareable in the URL.
+
+The official series has 25 measures, including homicide, stalking and harassment, burglary subtypes, knife-enabled crime and firearm offences. Grouped selectors distinguish main groups, detailed components and weapon collections, which overlap and must not be added together. Rare measures display per 100,000 residents; other measures display per 1,000. ONS-suppressed percentage changes stay unavailable. The monthly series retains its 14 Police.uk categories and adds a paired month-by-month view of the latest year against the same calendar months one year earlier. All 24 raw monthly counts remain in the profile CSV. These views use the existing source files and static JSON; they add no runtime services or refresh dependencies.
+
 ## Run locally
 
 Use Node.js 22 and Python 3.12 or newer.

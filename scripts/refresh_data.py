@@ -40,6 +40,7 @@ HO_INDEX = "https://www.gov.uk/government/statistical-data-sets/police-recorded-
 POP_SEARCH = "https://www.ons.gov.uk/search?q=population+estimates+police+force+areas&sortBy=release_date&order=desc"
 NATIONAL = "K04000001"
 CITY = "E23000034"
+PIPELINE_VERSION = 2
 CLASSIFICATION_GUIDE = "https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/methodologies/userguidetocrimestatisticsforenglandandwales#offence-types"
 ROBBERY_RECORDING_NOTE = "An April 2025 clarification of police counting rules increased the recording of business robbery during shop theft involving violence or threats. Changes in robbery and shoplifting across this date can reflect the recording change as well as changes in crime."
 TN = "{urn:oasis:names:tc:opendocument:xmlns:table:1.0}"
@@ -58,7 +59,29 @@ CATEGORIES = [
     {"id": "drug-offences", "label": "Drug offences", "column": "Drug offences", "description": "Drug possession and trafficking offences. Recorded totals are influenced by police activity."},
     {"id": "weapons", "label": "Weapons possession", "column": "Possession of weapons offences", "description": "Possession of weapons offences. This is not a count of all knife-enabled crime."},
     {"id": "public-order", "label": "Public order", "column": "Public order offences", "description": "Police-recorded public order offences, including offences involving fear or provocation of violence."},
+    {"id": "homicide", "label": "Homicide", "column": "Homicide", "description": "Police-recorded homicide offences, included within violence against the person. Percentage changes suppressed by ONS for small bases remain unavailable; a small absolute change can produce a large percentage change."},
+    {"id": "unlawful-driving", "label": "Death or serious injury — unlawful driving", "column": "Death or serious injury - unlawful driving", "description": "Death or serious injury caused by unlawful driving, included within violence against the person. ONS small-base percentage-change suppressions are preserved."},
+    {"id": "violence-with-injury", "label": "Violence with injury", "column": "Violence with injury", "description": "Recorded violence with injury, a component of violence against the person. Changes in reporting and crime recording can affect trends."},
+    {"id": "violence-without-injury", "label": "Violence without injury", "column": "Violence without injury", "description": "Recorded violence without injury, a component of violence against the person. Stalking and harassment are shown separately."},
+    {"id": "stalking-harassment", "label": "Stalking and harassment", "column": "Stalking and harassment", "description": "Recorded stalking and harassment, a component of violence against the person. Reporting and recording practices affect both levels and changes."},
+    {"id": "theft", "label": "All theft offences", "column": "Theft offences", "description": "The parent total for burglary, vehicle offences, theft from the person, bicycle theft, shoplifting and other theft. These component categories must not be added to this total."},
+    {"id": "residential-burglary", "label": "Residential burglary", "column": "Residential burglary", "description": "A component of burglary, covering homes and other buildings within the boundary of a dwelling. The April 2023 split between homes and unconnected buildings does not change this combined total. Rates use residents, rather than households."},
+    {"id": "non-residential-burglary", "label": "Non-residential burglary", "column": "Non-residential burglary", "description": "Burglary of business and community premises, a component of total burglary and theft offences. Rates use the resident population."},
+    {"id": "bicycle-theft", "label": "Bicycle theft", "column": "Bicycle theft", "description": "Recorded theft of bicycles, a component of total theft offences."},
+    {"id": "other-theft", "label": "Other theft offences", "column": "Other theft offences", "description": "Other recorded theft offences, excluding the separately displayed burglary, vehicle offences, theft from the person, bicycle theft and shoplifting categories. A component of total theft offences."},
+    {"id": "miscellaneous", "label": "Miscellaneous crimes against society", "column": "Miscellaneous crimes against society", "description": "The Home Office miscellaneous crimes against society group, including offences such as handling stolen goods and perverting the course of justice. This completes the main offence-group breakdown."},
+    {"id": "knife-enabled", "label": "Knife-enabled crime", "table": "Table P6", "description": "Selected serious offences involving a knife or sharp instrument: homicide, attempted murder, threats to kill, assault with injury or intent to cause serious harm, robbery, rape and sexual assault. This overlaps violence, robbery and sexual offences; it is not weapons possession or a separate addition to all crime. Counts come from a separate collection. National totals include British Transport Police. History contains published annual observations and the latest equivalent rolling years, not quarterly estimates. Recording improvements, including NDQIS from April 2019, limit older comparisons; Greater Manchester data before its 2018 review and Metropolitan Police data before its April 2024 revisions are not directly comparable with later figures."},
+    {"id": "firearms", "label": "Firearm offences", "table": "Table P8", "description": "Offences where a firearm was fired, used as a threat or used as a blunt instrument; conventional air weapons are excluded. This overlaps other offence categories and must not be added to all crime. It is not a count of shootings alone. National totals exclude British Transport Police. History contains published annual observations and the latest equivalent rolling years. Recording improvements limit historical comparisons; the Metropolitan Police changed systems in February 2024 and revised figures from April 2024."},
 ]
+MAIN_IDS = {"all-crime", "violence", "sexual-offences", "robbery", "theft", "criminal-damage", "drug-offences", "weapons", "public-order", "miscellaneous"}
+RARE_IDS = {"homicide", "unlawful-driving", "knife-enabled", "firearms"}
+WEAPON_IDS = {"knife-enabled", "firearms"}
+for _category in CATEGORIES:
+    _category["group"] = "Knife and firearm offences" if _category["id"] in WEAPON_IDS else "Main offence groups" if _category["id"] in MAIN_IDS else "Detailed offence groups"
+    _category["ratePer"] = 100000 if _category["id"] in RARE_IDS else 1000
+    _category["nationalIncludesBtp"] = _category["id"] != "firearms"
+STANDARD_CATEGORIES = [c for c in CATEGORIES if c["id"] not in WEAPON_IDS]
+STANDARD_IDS = [c["id"] for c in STANDARD_CATEGORIES]
 CAT_IDS = [c["id"] for c in CATEGORIES]
 RECORDED_GROUPS = {
     "Violence against the person", "Sexual offences", "Robbery", "Theft offences",
@@ -206,7 +229,7 @@ def spreadsheet_table(workbook, name):
     rows = {}
     region = None
     for row in sheet.iter_rows(values_only=True):
-        if row[0] == "Area Code":
+        if normalize(row[0]).casefold() in {"area code", "area codes"}:
             headers = [normalize(c) for c in row]
             continue
         code = str(row[0] or "")
@@ -225,20 +248,109 @@ def spreadsheet_table(workbook, name):
     return rows
 
 
-def category_value(row, category):
+def category_raw_value(row, category):
     # Match exact labels, except the all-crime header carries the fraud note.
     if category["id"] == "all-crime":
         candidates = [v for h, v in row["values"].items() if h.startswith("Total recorded crime")]
     else:
-        candidates = [v for h, v in row["values"].items() if h == category["column"]]
+        aliases = {category["column"]}
+        if category["id"] == "other-theft":
+            aliases.add("All other theft offences")
+        candidates = [v for h, v in row["values"].items() if h in aliases]
     if len(candidates) != 1:
         raise ValueError(f"Ambiguous/missing offence column: {category['column']}")
-    value = candidates[0]
+    return candidates[0]
+
+
+def source_count(value):
     if not isinstance(value, (int, float)) or isinstance(value, bool):
-        return None
+        if value is None or normalize(value).casefold() in {"[x]", "[u]", "[u1]", "[z]", "[c]", "-", "..", ""}:
+            return None
+        raise ValueError(f"Unknown offence-count marker {value!r}")
     if not math.isfinite(value) or value < 0 or value != int(value):
         raise ValueError(f"Invalid offence count {value}")
     return int(value)
+
+
+def category_value(row, category):
+    return source_count(category_raw_value(row, category))
+
+
+def published_change(value, count, previous):
+    """Preserve ONS suppression decisions rather than reconstructing a value."""
+    if isinstance(value, (float, int)) and not isinstance(value, bool):
+        if not math.isfinite(value) or count is None or not previous:
+            raise ValueError("Invalid published percentage change or zero denominator")
+        expected = (count / previous - 1) * 100
+        if abs(value - expected) > 0.000001:
+            raise ValueError(f"Published percentage change disagrees with counts: {value}/{expected}")
+        return round(value, 2), None
+    marker = normalize(value).casefold()
+    if marker == "[u]":
+        return None, "ONS suppresses this percentage change because it is based on fewer than 50 offences."
+    if value is None or marker in {"[x]", "[z]", "-", "..", ""}:
+        return None, "ONS does not publish a comparable percentage change for this measure."
+    raise ValueError(f"Unknown ONS percentage-change marker {value!r}")
+
+
+def header_period(header):
+    """Only complete date-range headers identify count columns, never % columns."""
+    found = re.fullmatch(r"([A-Za-z]+)\s+(20\d\d)\s+to\s+([A-Za-z]+)\s+(20\d\d)", normalize(header))
+    if not found:
+        return None
+    dates = []
+    for month, year in ((found[1], found[2]), (found[3], found[4])):
+        for fmt in ("%b %Y", "%B %Y"):
+            try:
+                dates.append(dt.datetime.strptime(month + " " + year, fmt).date())
+                break
+            except ValueError:
+                continue
+        else:
+            raise ValueError("Unknown source period month")
+    start, end = dates
+    end = end.replace(day=calendar.monthrange(end.year, end.month)[1])
+    if (end - start).days not in (364, 365):
+        raise ValueError("Weapon observation is not a complete rolling year")
+    return start, end
+
+
+def parse_weapons(workbook, period_end):
+    result = {}
+    p5 = spreadsheet_table(workbook, "Table P5")
+    p7 = spreadsheet_table(workbook, "Table P7")
+    for category in (c for c in CATEGORIES if c["id"] in WEAPON_IDS):
+        rows = spreadsheet_table(workbook, category["table"])
+        result[category["id"]] = {}
+        for code, row in rows.items():
+            dated = {}
+            change_cell = None
+            for header, value in row["values"].items():
+                period = header_period(header)
+                if period:
+                    if period[1] in dated:
+                        raise ValueError("Duplicate weapon observation period")
+                    dated[period[1]] = source_count(value)
+                elif "compared with previous year" in header:
+                    change_cell = value
+            previous_end = period_end.replace(year=period_end.year - 1)
+            if not dated or max(dated) != period_end or previous_end not in dated:
+                raise ValueError("Weapon collection and main crime reference periods disagree")
+            count, previous = dated[period_end], dated[previous_end]
+            change, reason = published_change(change_cell, count, previous)
+            value = {"count": count, "previousCount": previous, "changePercent": change,
+                     "dated": dict(sorted(dated.items()))}
+            if reason: value["changeSuppressedReason"] = reason
+            if category["id"] == "knife-enabled":
+                latest = [v for h, v in p5[code]["values"].items() if h == "Total of selected serious offences involving a knife"]
+                if len(latest) != 1 or source_count(latest[0]) != count:
+                    raise ValueError("Knife P5 and P6 totals disagree")
+                rates = {header_period(h)[1]: v for h, v in p7[code]["values"].items() if header_period(h)}
+                if set(rates) != {previous_end, period_end}:
+                    raise ValueError("Knife rate table periods disagree")
+                value["publishedRatePer100000"] = rates[period_end]
+            result[category["id"]][code] = value
+    return result
 
 
 def parse_crime(path):
@@ -246,6 +358,7 @@ def parse_crime(path):
     try:
         current = spreadsheet_table(workbook, "Table P1")
         previous = spreadsheet_table(workbook, "Table P4")
+        changes = spreadsheet_table(workbook, "Table P2")
         title = str(workbook["Table P1"].cell(1, 1).value)
         found = re.search(r"year ending (\w+) (20\d\d)", title, re.I)
         if not found:
@@ -254,7 +367,7 @@ def parse_crime(path):
         period_end = date.replace(day=calendar.monthrange(date.year, date.month)[1])
         if period_end.month not in (3, 6, 9, 12):
             raise ValueError("Expected a financial-quarter crime release")
-        return current, previous, period_end
+        return current, previous, changes, parse_weapons(workbook, period_end), period_end
     finally:
         workbook.close()
 
@@ -305,14 +418,23 @@ def categories_for_offence(group, subgroup):
     mapping = {"Violence against the person": "violence", "Sexual offences": "sexual-offences",
                "Robbery": "robbery", "Criminal damage and arson": "criminal-damage",
                "Drug offences": "drug-offences", "Possession of weapons offences": "weapons",
-               "Public order offences": "public-order"}
+               "Public order offences": "public-order", "Theft offences": "theft",
+               "Miscellaneous crimes against society": "miscellaneous"}
     if group in mapping:
         result.append(mapping[group])
     if group == "Theft offences":
         if "burglary" in subgroup.lower(): result.append("burglary")
-        elif subgroup == "Vehicle offences": result.append("vehicle-crime")
-        elif subgroup == "Theft from the person": result.append("theft-from-person")
-        elif subgroup == "Shoplifting": result.append("shoplifting")
+        if subgroup in {"Residential burglary", "Domestic burglary"}: result.append("residential-burglary")
+        elif subgroup in {"Non-residential burglary", "Non-domestic burglary"}: result.append("non-residential-burglary")
+        else:
+            theft_mapping = {"Vehicle offences": "vehicle-crime", "Theft from the person": "theft-from-person",
+                             "Shoplifting": "shoplifting", "Bicycle theft": "bicycle-theft", "Other theft offences": "other-theft"}
+            if subgroup in theft_mapping: result.append(theft_mapping[subgroup])
+    if group == "Violence against the person":
+        violence_mapping = {"Homicide": "homicide", "Death or serious injury - unlawful driving": "unlawful-driving",
+                            "Violence with injury": "violence-with-injury", "Violence without injury": "violence-without-injury",
+                            "Stalking and harassment": "stalking-harassment"}
+        if subgroup in violence_mapping: result.append(violence_mapping[subgroup])
     return result
 
 
@@ -377,7 +499,7 @@ def parse_history(path, current, period_end):
         if indexes != list(range(indexes[0], indexes[0] + 4)):
             raise ValueError("Gap in Home Office quarterly history")
         for code in expected_forces:
-            rolling[dates[i]][code] = {cat: sum(quarters[d][code][cat] for d in window) for cat in CAT_IDS}
+            rolling[dates[i]][code] = {cat: sum(quarters[d][code][cat] for d in window) for cat in STANDARD_IDS}
     return dict(sorted(rolling.items())[-13:])
 
 
@@ -399,8 +521,20 @@ def population_for(code, year, populations, members):
     return sum(values), actual_years[0]
 
 
+def historical_rate(code, date, count, populations, members):
+    if count is None or code == CITY:
+        return None
+    # Published weapon history begins before this population series. Keep those
+    # actual offence counts; never invent an earlier population denominator.
+    force_codes = members.get(code, [code])
+    if any(date.year - 1 < min(populations[force]) for force in force_codes):
+        return None
+    population, _ = population_for(code, date.year - 1, populations, members)
+    return round(count / population * 1000, 8)
+
+
 def build_dataset(records, paths):
-    current, previous, period_end = parse_crime(paths["ons-crime"])
+    current, previous, changes, weapons, period_end = parse_crime(paths["ons-crime"])
     populations = parse_population(paths["ons-population"])
     history = parse_history(paths["home-office-history"], current, period_end)
     force_codes = [code for code in current if code.startswith(("E230", "W150"))]
@@ -427,15 +561,30 @@ def build_dataset(records, paths):
         metrics = {}
         for category in CATEGORIES:
             cat = category["id"]
-            count = category_value(current[code], category)
-            prev_count = category_value(previous[code], category)
             history_points = []
-            for date, force_values in history.items():
-                history_members = members.get(code, [code]) + (["BTP"] if code == NATIONAL else [])
-                historic_count = sum(force_values[force][cat] for force in history_members)
-                hist_pop, _ = population_for(code, min(date.year - 1, latest_population_year), populations, members)
+            if cat in WEAPON_IDS:
+                source = weapons[cat][code]
+                count, prev_count = source["count"], source["previousCount"]
+                change, reason = source["changePercent"], source.get("changeSuppressedReason")
+                dated_counts = source["dated"].items()
+                if cat == "knife-enabled":
+                    published_rate = source["publishedRatePer100000"]
+                    if code == CITY:
+                        if normalize(published_rate).casefold() not in {"[u1]", "[x]"}:
+                            raise ValueError("ONS unexpectedly publishes a City of London knife rate")
+                    elif count is not None and (not isinstance(published_rate, (int, float)) or abs(count / population * 100000 - published_rate) > 0.00001):
+                        raise ValueError(f"Knife P7 rate does not reconcile with exact ONS population: {name}")
+            else:
+                count = category_value(current[code], category)
+                prev_count = category_value(previous[code], category)
+                change, reason = published_change(category_raw_value(changes[code], category), count, prev_count)
+                dated_counts = []
+                for date, force_values in history.items():
+                    history_members = members.get(code, [code]) + (["BTP"] if code == NATIONAL else [])
+                    dated_counts.append((date, sum(force_values[force][cat] for force in history_members)))
+            for date, historic_count in dated_counts:
                 history_points.append({"periodEnd": date.isoformat(), "count": historic_count,
-                                       "rate": None if code == CITY else round(historic_count / hist_pop * 1000, 4)})
+                                       "rate": historical_rate(code, date, historic_count, populations, members)})
             # Cross-check two independent official extracts. No invented fallback if
             # a new offence definition or file format makes them disagree.
             if count is not None and history_points[-1]["count"] != count:
@@ -445,15 +594,21 @@ def build_dataset(records, paths):
             if prev_count is not None and earlier is not None and prev_count != earlier:
                 raise ValueError(f"Previous-year reconciliation failed: {name}/{cat}: ONS={prev_count}, Home Office={earlier}")
             metrics[cat] = {"count": count,
-                            "rate": None if count is None or code == CITY else round(count / population * 1000, 4),
+                            "rate": None if count is None or code == CITY else round(count / population * 1000, 8),
                             "previousCount": prev_count,
-                            "changePercent": None if count is None or not prev_count else round((count / prev_count - 1) * 100, 2),
+                            "changePercent": change,
                             "history": history_points}
+            if reason:
+                metrics[cat]["changeSuppressedReason"] = reason
         quality = []
         if code == CITY:
             quality.append("Resident-population rates are suppressed, following the ONS treatment. The City has a large visiting and commuter population and is excluded from rate rankings.")
         if area_type == "nation":
-            quality.append("Includes British Transport Police. Regional and territorial-force totals exclude British Transport Police, whose crimes cannot be assigned consistently to these areas.")
+            quality.append("National totals include British Transport Police except for firearm offences, whose collection excludes it. Regional and territorial-force totals exclude British Transport Police.")
+        if code in {"E23000001", "E12000007"}:
+            quality.append("Knife-enabled and firearm offence comparisons across the Metropolitan Police's February 2024 system change and April 2024 data revisions require caution. Earlier knife records were not revised consistently; published annual observations are retained without interpolation.")
+        if code in {"E23000005", "E12000002"}:
+            quality.append("A Greater Manchester Police review found earlier knife-enabled offences were undercounted. Knife figures before its 2018 recording review are not directly comparable with subsequent years.")
         areas.append({"id": code, "code": code, "name": name, "type": area_type,
                       "regionId": current[code]["regionId"] if area_type == "force" else None,
                       "population": population, "populationYear": pop_year,
@@ -473,10 +628,13 @@ def build_dataset(records, paths):
                          "frequency": "quarterly", "sourcePublishedAt": published_at},
             "updatePolicy": {"checkFrequency": "monthly", "publicationFrequency": "quarterly",
                              "note": "Sources are checked each month. Comparable official crime figures are released quarterly, usually about four months after the period ends."},
-            "categories": [{k: v for k, v in c.items() if k != "column"} for c in CATEGORIES],
+            "categories": [{k: v for k, v in c.items() if k not in {"column", "table"}} for c in CATEGORIES],
             "sources": [{k: s[k] for k in ("id", "title", "url", "publishedAt")} for s in records],
             "notes": [
-                "The England and Wales reference includes British Transport Police; regional and territorial-force comparisons exclude it. London regional totals include City of London.",
+                "The England and Wales reference includes British Transport Police except for firearm offences. Regional and territorial-force comparisons exclude it. London regional totals include City of London.",
+                "Main offence groups and their detailed components overlap. Knife-enabled and firearm offences also overlap other categories. Never add parent groups, their components and weapon-enabled measures together.",
+                "Published ONS percentage-change suppressions are preserved, including small-base suppressions. Some observations have counts but no published comparable change.",
+                "Standard offence histories contain quarterly rolling-year totals. Knife-enabled and firearm histories retain the actual published annual dates and latest equivalent rolling years; intervening quarterly observations are not estimated. Historical weapon rates are unavailable before a matching ONS population estimate exists.",
                 ROBBERY_RECORDING_NOTE,
             ],
             "methodology": [
@@ -484,18 +642,19 @@ def build_dataset(records, paths):
                 "Each count covers a rolling 12-month period. Year-on-year change compares the count with the preceding rolling year ending in the same quarter.",
                 "Fraud and anti-social behaviour incidents are excluded. Weapons possession is not the same measure as knife-enabled crime.",
                 "Rates are calculated from exact ONS mid-year resident-population estimates, not inferred from rounded published rates. Historical rates use the latest available estimate at or before the year preceding each period end. Historical population estimates may be revised.",
-                "Crime histories sum four consecutive quarters from the latest Home Office revised open-data file. Latest and previous-year counts are reconciled against ONS Tables P1 and P4 before publication.",
+                "Standard crime histories sum four consecutive quarters from the latest Home Office revised open-data file. Latest and previous-year counts are reconciled against ONS Tables P1 and P4, and published percentage changes/suppressions against P2, before publication. Knife totals reconcile between P5 and P6 and current rates against P7; firearm counts and their dated histories come directly from P8.",
                 "City of London counts remain visible, but its resident-based rates and rate rankings are suppressed. London regional totals include City of London.",
                 "This version covers England and Wales. Crime recording systems and offence definitions differ in Scotland and Northern Ireland.",
             ], "areas": areas}
     validate_dataset(data)
-    manifest = {"schemaVersion": 1, "generatedAt": generated, "coverage": data["coverage"],
+    manifest = {"schemaVersion": 1, "pipelineVersion": PIPELINE_VERSION, "generatedAt": generated, "coverage": data["coverage"],
                 "sources": records, "licence": "Open Government Licence v3.0",
                 "methodologyReferences": [{"title": "ONS user guide: robbery definitions and April 2025 counting-rule clarification", "url": CLASSIFICATION_GUIDE}],
                 "attribution": "Contains public sector information licensed under the Open Government Licence v3.0. Crime: Home Office and Office for National Statistics. Population: Office for National Statistics.",
-                "transforms": ["ONS P1 current and P4 previous-year counts; Home Office four-quarter rolling sums; exact ONS age/sex population sums; offences divided by resident population × 1,000."],
+                "transforms": ["ONS P1 current and P4 previous-year counts; published P2 changes and suppressions; Home Office four-quarter rolling sums for 23 standard measures; P5/P6 knife count reconciliation and P7 current-rate reconciliation; P8 firearm counts and published changes; actual dated annual weapon history; exact ONS age/sex population sums; all stored rates are offences divided by resident population × 1,000; ratePer metadata controls presentation only."],
                 "validation": {"territorialForces": 43, "regionsIncludingWales": 10,
-                               "categories": len(CATEGORIES), "rollingHistoryPoints": len(history),
+                               "categories": len(CATEGORIES), "standardCategories": len(STANDARD_CATEGORIES), "rollingHistoryPoints": len(history),
+                               "weaponCollections": {cat: {"historyPoints": len(weapons[cat][NATIONAL]["dated"]), "nationalIncludesBtp": cat != "firearms"} for cat in sorted(WEAPON_IDS)},
                                "onsHomeOfficeReconciliation": "passed"}}
     return data, manifest
 
@@ -512,6 +671,11 @@ def validate_dataset(data):
     categories = {c["id"] for c in data["categories"]}
     if categories != set(CAT_IDS):
         raise ValueError("Unexpected category coverage")
+    metadata = {c["id"]: c for c in data["categories"]}
+    for cat in CATEGORIES:
+        for field in ("ratePer", "group", "nationalIncludesBtp"):
+            if metadata[cat["id"]].get(field) != cat[field]:
+                raise ValueError("Category presentation or national coverage metadata mismatch")
     end = dt.date.fromisoformat(data["coverage"]["end"])
     start = dt.date.fromisoformat(data["coverage"]["start"])
     if (end - start).days not in (364, 365):
@@ -537,34 +701,77 @@ def validate_dataset(data):
                     raise ValueError("City of London rate must remain suppressed")
             elif metric["count"] is not None:
                 expected_rate = metric["count"] / area["population"] * 1000
-                if rate is None or abs(expected_rate - rate) > 0.000051:
+                if rate is None or abs(expected_rate - rate) > 0.0000000051:
                     raise ValueError("Incorrect population-normalised rate")
-            if metric["count"] is not None and metric["previousCount"]:
+            reason = metric.get("changeSuppressedReason")
+            if reason is not None and (not isinstance(reason, str) or not reason or metric["changePercent"] is not None):
+                raise ValueError("Invalid percentage-change suppression metadata")
+            if metric["count"] is not None and metric["previousCount"] and reason is None:
                 expected_change = (metric["count"] / metric["previousCount"] - 1) * 100
                 if metric["changePercent"] is None or abs(expected_change - metric["changePercent"]) > 0.0051:
                     raise ValueError("Incorrect year-on-year change")
             history = metric["history"]
-            if len(history) < 8 or history[-1]["periodEnd"] != data["coverage"]["end"]:
+            if len(history) < (2 if cat in WEAPON_IDS else 8) or history[-1]["periodEnd"] != data["coverage"]["end"]:
                 raise ValueError("Incomplete trend history")
             if metric["count"] is not None and history[-1]["count"] != metric["count"]:
                 raise ValueError("Trend endpoint differs from comparison count")
             if [p["periodEnd"] for p in history] != sorted({p["periodEnd"] for p in history}):
                 raise ValueError("Unordered or duplicated history periods")
+            previous_date = end.replace(year=end.year - 1).isoformat()
+            prior_point = next((p for p in history if p["periodEnd"] == previous_date), None)
+            if prior_point is None or prior_point["count"] != metric["previousCount"]:
+                raise ValueError("Previous-year trend observation disagrees with published count")
+            for point in history:
+                dt.date.fromisoformat(point["periodEnd"])
+                value = point["count"]
+                if value is not None and (not isinstance(value, int) or value < 0):
+                    raise ValueError("Invalid historical offence count")
+                if point["rate"] is not None and (not isinstance(point["rate"], (int, float)) or point["rate"] < 0):
+                    raise ValueError("Invalid historical rate")
+        # These are the disjoint source groups. Do not sum all 25 categories:
+        # the detailed breakdowns and weapon-enabled collections overlap them.
+        partitions = {
+            "all-crime": sorted(MAIN_IDS - {"all-crime"}),
+            "violence": ["homicide", "unlawful-driving", "violence-with-injury", "violence-without-injury", "stalking-harassment"],
+            "theft": ["burglary", "vehicle-crime", "theft-from-person", "bicycle-theft", "shoplifting", "other-theft"],
+            "burglary": ["residential-burglary", "non-residential-burglary"],
+        }
+        for parent, children in partitions.items():
+            for field in ("count", "previousCount"):
+                values = [area["metrics"][child][field] for child in children]
+                if all(value is not None for value in values) and area["metrics"][parent][field] != sum(values):
+                    raise ValueError(f"Offence hierarchy does not reconcile: {area['name']}/{parent}")
     for region in (a for a in areas if a["type"] == "region"):
         members = [a for a in areas if a["regionId"] == region["id"]]
         if not members or sum(a["population"] for a in members) != region["population"]:
             raise ValueError("Region population does not reconcile to its forces")
         for cat in categories:
-            expected = sum(a["metrics"][cat]["count"] for a in members)
-            if expected != region["metrics"][cat]["count"]:
-                raise ValueError("Region offence count does not reconcile to its forces")
-    # The national count includes BTP, so it is expected to exceed territorial sums.
+            for field in ("count", "previousCount"):
+                values = [a["metrics"][cat][field] for a in members]
+                if all(value is not None for value in values) and sum(values) != region["metrics"][cat][field]:
+                    raise ValueError(f"Region offence count does not reconcile to its forces: {region['name']}/{cat}/{field}")
+            for point in region["metrics"][cat]["history"]:
+                values = [next((p["count"] for p in a["metrics"][cat]["history"] if p["periodEnd"] == point["periodEnd"]), None) for a in members]
+                if all(value is not None for value in values) and sum(values) != point["count"]:
+                    raise ValueError("Historical regional count does not reconcile to its forces")
+    # Collection-specific national coverage: firearm offences exclude BTP.
     national = by_code[NATIONAL]
     territorial = [a for a in areas if a["type"] == "force"]
     if national["population"] != sum(a["population"] for a in territorial):
         raise ValueError("National resident-population aggregate does not reconcile")
-    if national["metrics"]["all-crime"]["count"] < sum(a["metrics"]["all-crime"]["count"] for a in territorial):
-        raise ValueError("Invalid national crime baseline")
+    for cat in categories:
+        for field in ("count", "previousCount"):
+            values = [a["metrics"][cat][field] for a in territorial]
+            if all(v is not None for v in values):
+                value = national["metrics"][cat][field]
+                if value is not None and (value < sum(values) if metadata[cat]["nationalIncludesBtp"] else value != sum(values)):
+                    raise ValueError("Invalid national crime baseline or BTP collection scope")
+        for point in national["metrics"][cat]["history"]:
+            values = [next((p["count"] for p in a["metrics"][cat]["history"] if p["periodEnd"] == point["periodEnd"]), None) for a in territorial]
+            if point["count"] is not None and all(v is not None for v in values):
+                invalid_scope = point["count"] < sum(values) if metadata[cat]["nationalIncludesBtp"] else point["count"] != sum(values)
+                if invalid_scope:
+                    raise ValueError("Historical national baseline has incorrect BTP collection scope")
     json.dumps(data, allow_nan=False)
 
 
@@ -597,13 +804,13 @@ def main(argv=None):
         manifest = json.loads((OUTPUT / "source-manifest.json").read_text())
         if len(manifest["sources"]) != 3 or manifest["validation"]["onsHomeOfficeReconciliation"] != "passed":
             raise ValueError("Invalid provenance manifest")
-        print("Snapshot valid: 43 territorial forces, 10 regions, national baseline, 12 categories.")
+        print(f"Snapshot valid: 43 territorial forces, 10 regions, national baseline, {len(CATEGORIES)} measures.")
         return 0
     records, paths = discover_sources()
     existing_manifest = OUTPUT / "source-manifest.json"
     if not args.force and existing_manifest.exists() and (OUTPUT / "crime.json").exists():
         old = json.loads(existing_manifest.read_text())
-        if old.get("sources") == records:
+        if old.get("sources") == records and old.get("pipelineVersion") == PIPELINE_VERSION:
             validate_dataset(json.loads((OUTPUT / "crime.json").read_text()))
             print("All official source files unchanged; published snapshot preserved.")
             return 0

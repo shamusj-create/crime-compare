@@ -53,9 +53,11 @@ The [Cloudflare setup guide](deploy/cloudflare-pages.md) describes this deployme
 
 ## Optional audience measurement
 
-A separate crime.compare GA4 property has been created; website activation is pending verification and publication. The [measurement release record](docs/ga4-measurement-release-2026-10-22.md) tracks its settings, consent checks and publication status. The owner can open the saved [Advertiser audience overview](https://analytics.google.com/analytics/web/#/a368143065p560206660/reports/reportinghub) using their existing Google access. The [private reporting guide](docs/analytics-advertiser-reporting.md) explains on-demand printable reports and spreadsheet exports once collection is verified and the period has settled.
+A separate crime.compare GA4 property, consent controller and public privacy notice are deployed in release `a7ff826`, Cloudflare deployment `77451b43`; [CI run 39810368507](https://github.com/shamusj-create/crime-compare/actions/runs/39810368507) passed. Live checks found no Google requests before consent or after refusal and reload. **The operator's live opt-in collection test is pending; collection health and the first full measurement day are not yet verified.** The [measurement release record](docs/ga4-measurement-release-2026-10-22.md) tracks the evidence.
 
-The planned collection requires prior opt-in, offers refusal and withdrawal, and removes URL searches and selections from reported page addresses. It uses standard GA4 with the existing static hosting, without a paid upgrade or extra runtime service. Analytics does not collect crime statistics or participate in the monthly source refresh. Publishing it must preserve the existing data and successful source-check record.
+The owner can open the saved [Advertiser audience overview](https://analytics.google.com/analytics/web/#/a368143065p560206660/reports/reportinghub) using their existing Google access. The [private reporting guide](docs/analytics-advertiser-reporting.md) explains on-demand printable reports and spreadsheet exports once collection is verified and the period has settled.
+
+Collection requires prior opt-in, offers refusal and withdrawal, and removes URL searches and selections from reported page addresses. It uses standard GA4 with the existing static hosting, without a paid upgrade or extra runtime service. Analytics does not collect crime statistics or participate in the monthly source refresh. This release preserved every existing public data file and successful source-check record.
 
 ## Data and interpretation
 

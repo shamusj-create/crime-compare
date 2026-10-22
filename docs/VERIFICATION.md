@@ -43,3 +43,13 @@ Local browser checks confirmed that a fresh visit opens police force areas, whil
 The monthly Dorset profile reconciles its annual total (41,899 versus 44,548, down 5.95%) and August counts (4,068 versus 3,563, up 14.17%). The grouped monthly bars, exact-figures disclosure, category navigation and full-area CSV download were exercised. Greater Manchester shows unavailable annual/monthly values and incomplete-coverage notes, with no invented zeros or trend. Desktop and 390px mobile layouts were checked, including horizontal scrolling inside data tables.
 
 The production build, 16 Node tests, 29 Python tests and both published-snapshot validators passed. Both snapshot hashes match refresh-status; all monthly metric values remain unchanged after rebuilding their provenance against the expanded official snapshot. The rich-profile update was published from commit `9d15808` in deployment `5a7f9324` and passed CI run `39799183022`. Custom-domain metadata was subsequently deployed in commit `17f803a`, deployment `ca0865e4`, and verified over HTTPS at `crime.compare`.
+
+## Optional GA4 release, 22 October 2026
+
+The consent controller and public privacy notice were deployed from commit `a7ff826` in Cloudflare deployment `77451b43`; [CI run 39810368507](https://github.com/shamusj-create/crime-compare/actions/runs/39810368507) passed. The dedicated crime.compare property is `560206660`, measurement ID `G-6DZZ4SE8DG`. Settings and reporting links are in the [measurement release record](ga4-measurement-release-2026-10-22.md).
+
+Live checks found no Google requests before consent or after **No thanks** and reload. The owner/test marker was set before acceptance; `www` observed the shared declined choice and marker. The 390 × 844 prompt fitted without horizontal overflow, with equally sized 42-pixel buttons. Desktop proof is `artifacts/analytics-2026-10-22/consent-desktop.jpg`. Twelve controller lifecycle/privacy tests passed, covering sanitized defaults, withdrawal, expiry, shared-host changes and failed-storage reloads.
+
+Scripts, public configuration, datasets, manifests and status matched the build. The privacy HTML differs only through Cloudflare's expected email-protection substitutions and same-origin decoding script. A comparison of `17f803a` and `a7ff826` found no changed files under `public/data`; the statistics and monthly-refresh record were preserved. No paid upgrade or additional runtime service was added.
+
+**The operator's live opt-in collection test is pending.** Successful Google collection and collection health are not yet verified, and the first complete verified measurement day remains unset. No real advertiser report or historical audience claim has been generated.

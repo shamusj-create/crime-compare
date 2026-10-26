@@ -6,7 +6,7 @@ import vm from 'node:vm'
 const source = readFileSync(new URL('../public/audience.js', import.meta.url), 'utf8')
 const ID = 'G-6DZZ4SE8DG', KEY = 'crimeledger-audience-choice-v1', INTERNAL = 'crimeledger-analytics-internal', EXCLUDE = 'crimeledger-analytics-exclude'
 const NOW = Date.UTC(2026, 9, 22, 12), DAY = 86400000
-const saved = (choice = 'allow', chosenAt = NOW) => JSON.stringify({ revision: 1, choice, chosenAt })
+const saved = (choice = 'allow', chosenAt = NOW) => JSON.stringify({ revision: 2, choice, chosenAt })
 
 function harness({ host = 'crime.compare', initial = null, local = null, referrer = '', pathname = '/', search = '', hash = '', shared = new Map(), internal = false, excluded = false, writable = true, duplicate = false } = {}) {
   if (initial) shared.set(KEY, encodeURIComponent(initial))

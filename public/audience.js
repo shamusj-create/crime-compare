@@ -7,7 +7,7 @@
   const choiceKey = 'crimeledger-audience-choice-v1';
   const internalKey = 'crimeledger-analytics-internal';
   const excludeKey = 'crimeledger-analytics-exclude';
-  const revision = 1, lifetime = 180 * 86400000;
+  const revision = 2, lifetime = 180 * 86400000;
   const disabledKey = `ga-disable-${id}`;
   const denied = { ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied' };
   const pages = {
@@ -24,6 +24,7 @@
   let preference, prompt, manage, preferenceTimer;
   let tagState = 'unloaded', configured = false, lastPage = null, sentAnyPageview = false;
   let lastCookie = null, lastInternal = null, memoryRejection = false;
+  let mini = null, miniLoading = false;
   window[disabledKey] = true;
 
   function readCookie(key) {
@@ -46,7 +47,7 @@
   function parsePreference(raw) {
     try {
       const next = JSON.parse(raw), age = Date.now() - next.chosenAt;
-      return next.revision === revision && ['allow', 'reject'].includes(next.choice) && Number.isFinite(next.chosenAt) && age >= 0 && age < lifetime ? next : null;
+      return (next.revision === revision || (next.revision === 1 && next.choice === 'reject')) && ['allow', 'reject'].includes(next.choice) && Number.isFinite(next.chosenAt) && age >= 0 && age < lifetime ? next : null;
     } catch { return null; }
   }
   function readPreference() {
@@ -73,10 +74,23 @@
   function clearAnalyticsCookies() {
     for (const item of document.cookie.split(';')) {
       const name = item.trim().split('=')[0];
-      if (/^_ga(?:_|$)/.test(name)) removeCookie(name);
+      if (/^(?:_ga(?:_|$)|minilytics_(?:vid|sid)$)/.test(name)) removeCookie(name);
     }
   }
+  function startMinilytics() {
+    if (!permission() || readCookie(internalKey) === 'true') { mini?.stop(); mini = null; return; }
+    if (mini) { mini.update(); return; }
+    if (miniLoading) return;
+    miniLoading = true;
+    import('/minilytics.js').then(({ createTracker }) => {
+      miniLoading = false;
+      if (!permission() || readCookie(internalKey) === 'true') return;
+      mini = createTracker({ siteId: '214w4o270f40025o', origin: 'https://crime.compare', cookieDomain: 'crime.compare',
+        permitted: () => permission() && readCookie(internalKey) !== 'true', path: currentPage });
+    }).catch(() => { miniLoading = false; });
+  }
   function disableMeasurement() {
+    mini?.stop(); mini = null;
     const wasDisabled = window[disabledKey];
     window[disabledKey] = true;
     if (configured && !wasDisabled) gtag('consent', 'update', denied);
@@ -92,6 +106,7 @@
     if (!permission()) { disableMeasurement(); return; }
     const page = currentPage();
     if (!page) { disableMeasurement(); return; }
+    startMinilytics();
     if (tagState === 'loading') return;
     if (tagState === 'unloaded') {
       window.dataLayer = window.dataLayer || [];
@@ -188,7 +203,7 @@
     if (manage) manage.hidden = true;
     prompt = document.createElement('section');
     prompt.className = 'audience-choice'; prompt.setAttribute('aria-labelledby', 'audience-choice-heading');
-    prompt.innerHTML = '<strong id="audience-choice-heading">Help us count readers</strong><p>With your permission, Google Analytics uses cookies to measure visits and broad sections. We use aggregate audience reports to improve this site and inform potential sponsors. Your choice does not affect access. <a href="/privacy/">Privacy and settings</a></p><p class="audience-message" data-audience-message role="status"></p><div class="audience-choice__actions"><button type="button" data-audience-choice="reject">No thanks</button><button type="button" data-audience-choice="allow">Allow analytics</button></div>';
+    prompt.innerHTML = '<strong id="audience-choice-heading">Help us count readers</strong><p>With your permission, Google Analytics and our self-hosted Minilytics use cookies to measure visits and broad sections. We use aggregate audience reports to improve this site and inform potential sponsors. Your choice does not affect access. <a href="/privacy/">Privacy and settings</a></p><p class="audience-message" data-audience-message role="status"></p><div class="audience-choice__actions"><button type="button" data-audience-choice="reject">No thanks</button><button type="button" data-audience-choice="allow">Allow analytics</button></div>';
     prompt.addEventListener('click', event => {
       const value = event.target.closest('[data-audience-choice]')?.dataset.audienceChoice;
       if (['allow', 'reject'].includes(value)) choose(value);

@@ -464,7 +464,7 @@ def main_html(page):
 def standalone(page, lastmod):
     nav = ''.join(link(route, label) for route, label in [('/#comparison', 'Comparison'), ('/areas/', 'Areas'), ('/crime/', 'Crime types'), ('/methodology/', 'Methodology'), ('/sources/', 'Sources')])
     crumbs = '<nav class="discovery-breadcrumbs" aria-label="Breadcrumb">' + ' / '.join(link(route, label) for label, route in page.breadcrumbs) + '</nav>'
-    return ('<!doctype html>\n<html lang="en-GB"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n' + metadata(page, lastmod) + '\n<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/discovery.css"></head>\n'
+    return ('<!doctype html>\n<html lang="en-GB"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n' + metadata(page, lastmod) + '\n<link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/discovery.css"><script defer src="/audience.js"></script></head>\n'
             '<body class="discovery-page"><header class="discovery-header">' + link('/', 'CrimeLedger.', 'discovery-brand') + '<nav class="discovery-nav" aria-label="Main navigation">' + nav + '</nav></header>' + crumbs + main_html(page) + '<footer class="discovery-footer"><p>CrimeLedger — clear comparisons of the public record.</p><p>' + link('/privacy/', 'Privacy and analytics choices') + ' · ' + link('https://politicians.compare', 'politicians.compare') + '</p><p>Contains public sector information licensed under the Open Government Licence v3.0.</p></footer></body></html>\n').encode('utf-8')
 
 

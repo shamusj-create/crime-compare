@@ -658,10 +658,10 @@
       "title": "Crime comparison methodology — CrimeLedger"
     },
     "/privacy/": {
-      "contentSha256": "55c1f2112d67f9bfa8d6ef981c41ce75134408f847da6004a974c32603d57f33",
-      "description": "How crime.compare handles optional analytics, cookies and audience reporting, and how to change your choices.",
+      "contentSha256": "a3c21a44e9a16452abb0d2db69f9a7107a9419357c0929651feb5d448d1ccf7e",
+      "description": "How crime.compare handles aggregate analytics and privacy choices, and how to change your choices.",
       "kind": "privacy",
-      "lastmod": "2026-10-26",
+      "lastmod": "2026-11-02",
       "path": "privacy/index.html",
       "title": "Privacy and analytics choices — CrimeLedger"
     },
@@ -675,5 +675,5 @@
     }
   },
   "schemaVersion": "crime-compare-discovery-1.0.0",
-  "sitemapSha256": "2ea2c55367301069f25bfa7f8a56e9d670d7a02c719e74ed6925cdaaa2728ea8"
+  "sitemapSha256": "58d4d1107c073e1bb55dbe5842e2ab447d30ae7dba63a99543cbcc7163660564"
 }

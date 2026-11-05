@@ -1,5 +1,7 @@
 # GA4 measurement release — 22 October 2026
 
+**Historical release record.** Commit `91fc642` retired GA4 and Minilytics from the default-branch implementation on 2 November 2026. The evidence below describes the 22 October setup, not current collection. Use the current code, published privacy notice and actual deployment evidence for health checks; do not restore retired trackers from this record.
+
 ## Status
 
 The dedicated Google Analytics property, consent controller and privacy notice are deployed from [commit `a7ff826`](https://github.com/shamusj-create/crime-compare/commit/a7ff826) in Cloudflare deployment `77451b43`. [CI run 39810368507](https://github.com/shamusj-create/crime-compare/actions/runs/39810368507) passed. User-approved live tests on 22 October 2026 verified consent-gated collection transport, sanitized manual page views and cross-host withdrawal after correcting Google's saved stream settings. **The first complete measurement day is 23 October 2026.** This verification establishes the tested flow, not uninterrupted future collection or an audience count.

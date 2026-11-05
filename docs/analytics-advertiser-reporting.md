@@ -1,5 +1,7 @@
 # Private advertiser reporting for crime.compare
 
+**Historical GA4 workflow.** The default branch retired GA4 and Minilytics in favor of Cloudflare Web Analytics in commit `91fc642` on 2 November 2026. This guide and its helper apply only to historical periods when GA4 collection was verified. Check the actual production deployment and collection cutoff before selecting dates; do not infer zero readership after collection stopped or use this helper for current Cloudflare reporting. The current measurement behavior is described in the public privacy notice and [README](../README.md#audience-measurement).
+
 The dedicated GA4 property is **560206660**, in account **368143065**; the web stream is **16182898408** for `https://crime.compare`. Its public measurement ID is `G-6DZZ4SE8DG`. Reporting uses the **numeric property ID**, not the measurement ID. [Open the source property](https://analytics.google.com/analytics/web/#/p560206660/reports/intelligenthome).
 
 This is an on-demand reporting tool, **not an audience claim or a guarantee of continuous collection health**. The [release record](ga4-measurement-release-2026-10-22.md) documents verified consent-gated production transport and sanitization on 22 October 2026, making 23 October the first complete measurement day. No historical audience is recovered by creating a property, and no real advertiser report has been generated as part of this implementation. Check actual collection health throughout each report period before using its figures.

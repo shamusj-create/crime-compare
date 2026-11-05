@@ -1,4 +1,16 @@
-# Release verification — 22 October 2026
+# Release verification
+
+## Monthly publication repair — 5 November 2026
+
+The failure in [CI run 41447779659](https://github.com/shamusj-create/crime-compare/actions/runs/41447779659) was reproduced locally. Commit `91fc642` had added the shared Cloudflare analytics controller to standalone discovery pages, while `test_canonical_metadata_schema_and_standalone_links` still required its absence. The same Python suite runs before monthly publication, so the stale assertion would also block that job.
+
+The corrected test requires exactly `/audience.js` on every generated non-root page, including privacy, while the root retains its separate Vite-bundle checks. The live verifier still rejects unexpected scripts. The deployment, discovery and historical GA4 guides now distinguish the current implementation from the retired trackers.
+
+Both snapshot validators, 81 Python tests, 26 Node tests, TypeScript, the production build and offline verification of all 84 discovery pages passed. Read-only production verification against that build passed all 84 HTML pages, sitemap/manifest records and the social image without executing analytics. This verifies the existing publication and the repaired checks; it does not claim that the next scheduled event has already run.
+
+The monthly health check remains active for the sixth at 09:00 Europe/London. Its saved prompt uses `/Users/seanj/crime-compare`, explicitly selects `.venv/bin/python` and follows the current analytics implementation. The original chat's old workspace path resolves through the preserved symlink to the new checkout. GitHub workflow access, the required encrypted deployment-secret names and the Pages project variable were checked without exposing credentials.
+
+## Original release — 22 October 2026
 
 Live app: https://crime.compare/
 Source: https://github.com/shamusj-create/crime-compare

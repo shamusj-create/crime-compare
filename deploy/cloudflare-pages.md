@@ -6,6 +6,8 @@ The scheduled GitHub workflow updates the repository’s data and rebuilds the c
 
 ## Current release
 
+The default branch moved to Cloudflare Web Analytics in `91fc642` on 2 November 2026. Its shared `/audience.js` controller is intentionally included on all discovery pages. Use the current code and public privacy notice for analytics behavior; the GA4 evidence below and in older runbooks is historical. Production verification must compare scripts with the corresponding verified publication build and continue rejecting additional injected scripts. Read-only checks must not execute analytics beacons or change measurement preferences.
+
 The discovery release is `e425f87`, deployment `5bd347ba`, with [passing CI](https://github.com/shamusj-create/crime-compare/actions/runs/39827868778) and live checks of all 84 pages on the deployment and production origins. The owner approved the dedicated Pages edit token on 22 October 2026. Both encrypted GitHub deployment secrets and the `crime-compare` Pages project variable are configured, enabling scheduled static uploads. [Full publication run 39833556614](https://github.com/shamusj-create/crime-compare/actions/runs/39833556614) passed and published snapshot `914bb6b` to deployment `df0f97e8`, including exact JSON checks and all 84 production discovery pages. See the [discovery release guide](../docs/discoverability.md).
 
 The public repository is [shamusj-create/crime-compare](https://github.com/shamusj-create/crime-compare), with default branch `main`. Cloudflare Pages project `crime-compare` serves [crime.compare](https://crime.compare/), [www.crime.compare](https://www.crime.compare/) and [crime-compare.pages.dev](https://crime-compare.pages.dev/). Metadata release `17f803a` is verified in deployment `ca0865e4` and passed [CI run 39803909722](https://github.com/shamusj-create/crime-compare/actions/runs/39803909722).
@@ -21,7 +23,7 @@ The canonical hostname `https://crime.compare/` is Active with SSL enabled. HTTP
 | Monthly source collection | Standard GitHub-hosted Ubuntu runner in the public repository |
 | Scheduled deployment credentials | A dedicated account-scoped Pages edit token stored as an encrypted GitHub repository secret; built-in repository token for snapshot commits |
 | Database, paid API or runtime server | None |
-| Optional audience measurement | Standard GA4; no paid upgrade or extra runtime service |
+| Audience measurement | Cloudflare Web Analytics through the shared opt-out controller |
 | Hostname | Free `*.pages.dev`; a custom domain is an optional annual purchase |
 
 Cloudflare lists unlimited static requests/bandwidth, 500 builds per month, one concurrent build, 20,000 files per site and 25 MiB per file. The application uses no Pages Functions, Workers, database or storage service. See [Pages pricing](https://www.cloudflare.com/developer-platform/products/pages/) and [current limits](https://developers.cloudflare.com/pages/platform/limits/).

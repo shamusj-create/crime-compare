@@ -1,5 +1,6 @@
 import copy
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -81,7 +82,14 @@ class DiscoveryTests(unittest.TestCase):
         self.assertIn('"@type":"BreadcrumbList"', page)
         self.assertIn('"@type":"WebSite"', page)
         self.assertIn('"@type":"Organization"', page)
-        self.assertNotIn('audience.js', page)
+        # The Cloudflare migration includes the shared analytics controller on
+        # discovery pages. Require it once, without retired or injected scripts.
+        for route, record in manifest['pages'].items():
+            if route == '/':
+                continue  # The root preserves the Vite shell and its app bundle.
+            with self.subTest(route=route):
+                html = (self.output / record['path']).read_text()
+                self.assertEqual(re.findall(r'<script\b[^>]*\bsrc="([^"]+)"', html), ['/audience.js'])
         self.assertNotIn('type="module"', page)
         self.assertIn('data-snapshot-end="2026-06-30"', page)
         self.assertIn('1 July 2025', page)
